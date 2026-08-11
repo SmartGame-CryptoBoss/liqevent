@@ -108,19 +108,6 @@
     formStatus.className = `form-status ${type}`.trim();
   };
 
-  const collectAttribution = () => {
-    const query = new URLSearchParams(window.location.search);
-    return {
-      utm_source: query.get('utm_source') || '',
-      utm_medium: query.get('utm_medium') || '',
-      utm_campaign: query.get('utm_campaign') || '',
-      utm_content: query.get('utm_content') || '',
-      utm_term: query.get('utm_term') || '',
-      page_url: window.location.href,
-      referrer: document.referrer || ''
-    };
-  };
-
   const validateForm = () => {
     if (!leadForm) return false;
     let firstInvalid = null;
@@ -136,6 +123,51 @@
       return false;
     }
     return true;
+  };
+
+  const isHttpUrl = (value) => /^https?:\/\//i.test(String(value || '').trim());
+
+  const buildLeadPayload = (formData) => {
+    const contact = String(formData.get('phone_or_telegram') || '').trim();
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+    const isTelegram = /^@[a-zA-Z0-9_]{5,}$/.test(contact)
+      || /^(?:https?:\/\/)?(?:t\.me|telegram\.me)\//i.test(contact);
+
+    return {
+      name: String(formData.get('client_name') || '').trim(),
+      phone: !isEmail && !isTelegram ? contact : '',
+      telegram: isTelegram ? contact : '',
+      email: isEmail ? contact : '',
+      company: String(formData.get('company') || '').trim(),
+      eventType: String(formData.get('event_type') || '').trim(),
+      guests: String(formData.get('guest_count') || '').trim(),
+      date: String(formData.get('event_date') || '').trim(),
+      budget: String(formData.get('budget') || '').trim(),
+      message: String(formData.get('event_details') || '').trim()
+    };
+  };
+
+  const postLeadJson = async (endpoint, payload) => {
+    if (!isHttpUrl(endpoint)) throw new Error('Lead endpoint is not configured');
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify(payload),
+      keepalive: true
+    });
+
+    if (!response.ok) throw new Error(`Lead endpoint returned ${response.status}`);
+
+    const result = await response.json().catch(() => null);
+    if (result && (result.ok === false || result.success === false)) {
+      throw new Error('Lead endpoint rejected the submission');
+    }
+
+    return result;
   };
 
   leadForm?.addEventListener('input', (event) => {
@@ -155,8 +187,9 @@
     const formData = new FormData(leadForm);
     if (formData.get('_gotcha')) return;
 
-    const endpoint = String(config.leadEndpoint || leadForm.action || '').trim();
-    if (!/^https?:\/\//i.test(endpoint)) {
+    const endpoint = String(config.leadEndpoint || '').trim();
+    const fallbackEndpoint = String(config.leadFallbackEndpoint || leadForm.action || '').trim();
+    if (!isHttpUrl(endpoint) && !isHttpUrl(fallbackEndpoint)) {
       setStatus('Не вдалося надіслати заявку. Спробуйте ще раз або зв’яжіться з нами напряму.', 'error');
       trackEvent('form_config_missing');
       return;
@@ -169,27 +202,27 @@
     submitButton?.setAttribute('disabled', '');
     if (buttonLabel) buttonLabel.textContent = 'Надсилаємо…';
 
-    Object.entries(collectAttribution()).forEach(([key, value]) => formData.set(key, value));
-    formData.set('submitted_at', new Date().toISOString());
-    formData.set('source', 'liqevent.com');
-
     try {
-      const noCors = config.leadRequestMode === 'no-cors';
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        mode: noCors ? 'no-cors' : 'cors',
-        headers: noCors ? undefined : { Accept: 'application/json' },
-        body: noCors ? new URLSearchParams(Object.fromEntries(formData.entries())) : formData,
-        keepalive: true
-      });
-      if (!noCors && !response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = buildLeadPayload(formData);
+      let deliveryChannel = 'worker';
+
+      try {
+        await postLeadJson(endpoint, payload);
+      } catch {
+        deliveryChannel = 'formspree';
+        await postLeadJson(fallbackEndpoint, payload);
+      }
 
       leadForm.reset();
       leadForm.querySelectorAll('[aria-invalid]').forEach((field) => field.removeAttribute('aria-invalid'));
       leadForm.classList.add('is-sent');
       setStatus('Дякуємо! Заявку отримано. Ми зв’яжемося з вами найближчим часом.', 'success');
-      const eventType = String(formData.get('event_type') || '');
-      trackEvent('generate_lead', { form_id: 'lead-form', event_type: eventType });
+      const eventType = payload.eventType;
+      trackEvent('generate_lead', {
+        form_id: 'lead-form',
+        event_type: eventType,
+        delivery_channel: deliveryChannel
+      });
       if (typeof window.fbq === 'function') window.fbq('track', 'Lead', { content_name: eventType || 'Event request' });
       formStarted = false;
     } catch (error) {
