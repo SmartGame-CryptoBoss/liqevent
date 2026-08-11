@@ -3,11 +3,9 @@
  * See README.txt and integrations/google-apps-script.gs for setup instructions.
  */
 window.LIQEVENT_CONFIG = Object.freeze({
-  // Public Formspree / Google Apps Script / CRM endpoint.
-  leadEndpoint: 'https://formspree.io/f/xwleowbk',
-
-  // Formspree and JSON APIs use "cors"; the included Google Apps Script template uses "no-cors".
-  leadRequestMode: 'cors',
+  // Public delivery endpoints only. Never add Telegram bot tokens or chat IDs here.
+  leadEndpoint: 'https://liqevent-leads.v-kooov.workers.dev/',
+  leadFallbackEndpoint: 'https://formspree.io/f/xwleowbk',
 
   // Public link only, for example https://t.me/your_public_username
   telegramUrl: '',
