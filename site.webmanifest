@@ -1,0 +1,16 @@
+{
+  "name": "LIQ EVENT",
+  "short_name": "LIQ EVENT",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111214",
+  "theme_color": "#111214",
+  "icons": [
+    {
+      "src": "assets/img/logo.png",
+      "sizes": "900x900",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
