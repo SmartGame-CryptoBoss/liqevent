@@ -11,13 +11,18 @@ WHAT IS INCLUDED
 
 PUBLIC CONFIGURATION — config.js
 Fill only public values:
-- leadEndpoint: deployed webhook URL
-- leadRequestMode: "no-cors" for the included Apps Script, "cors" for a JSON API
+- leadEndpoint: public Formspree endpoint or deployed webhook URL
+- leadRequestMode: "cors" for Formspree/JSON APIs, "no-cors" for the included Apps Script
 - telegramUrl: public Telegram link, for example https://t.me/your_username
 - ga4MeasurementId: GA4 ID in G-XXXXXXXXXX format
 - metaPixelId: numeric Meta Pixel ID
 
 Never put Telegram bot tokens, CRM keys or other secrets into config.js.
+
+FORMSPREE
+The production form posts to https://formspree.io/f/xwleowbk via AJAX using
+FormData and an application/json response. The endpoint is public by design;
+no Formspree API key or secret is stored in the frontend.
 
 GOOGLE SHEETS + TELEGRAM SETUP
 1. Create a Google Sheet and copy its spreadsheet ID.

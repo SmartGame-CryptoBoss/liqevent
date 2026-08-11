@@ -100,6 +100,7 @@
   const leadForm = document.querySelector('#lead-form');
   const formStatus = document.querySelector('#form-status');
   let formStarted = false;
+  let isSubmitting = false;
 
   const setStatus = (message, type = '') => {
     if (!formStatus) return;
@@ -147,17 +148,16 @@
 
   leadForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (isSubmitting) return;
     setStatus('');
     if (!validateForm()) return;
 
-    const data = Object.fromEntries(new FormData(leadForm).entries());
-    if (data.website) return;
-    delete data.website;
-    delete data.consent;
+    const formData = new FormData(leadForm);
+    if (formData.get('_gotcha')) return;
 
-    const endpoint = String(config.leadEndpoint || '').trim();
+    const endpoint = String(config.leadEndpoint || leadForm.action || '').trim();
     if (!/^https?:\/\//i.test(endpoint)) {
-      setStatus('Онлайн-відправлення очікує підключення. Зателефонуйте нам або напишіть на LiQevent@gmail.com.', 'error');
+      setStatus('Не вдалося надіслати заявку. Спробуйте ще раз або зв’яжіться з нами напряму.', 'error');
       trackEvent('form_config_missing');
       return;
     }
@@ -165,37 +165,38 @@
     const submitButton = leadForm.querySelector('button[type="submit"]');
     const buttonLabel = submitButton?.querySelector('.button-label');
     const originalLabel = buttonLabel?.textContent || 'Надіслати заявку';
+    isSubmitting = true;
     submitButton?.setAttribute('disabled', '');
     if (buttonLabel) buttonLabel.textContent = 'Надсилаємо…';
 
-    const payload = {
-      ...data,
-      ...collectAttribution(),
-      submitted_at: new Date().toISOString(),
-      source: 'liqevent.com'
-    };
+    Object.entries(collectAttribution()).forEach(([key, value]) => formData.set(key, value));
+    formData.set('submitted_at', new Date().toISOString());
+    formData.set('source', 'liqevent.com');
 
     try {
       const noCors = config.leadRequestMode === 'no-cors';
       const response = await fetch(endpoint, {
         method: 'POST',
         mode: noCors ? 'no-cors' : 'cors',
-        headers: noCors ? undefined : { 'Content-Type': 'application/json' },
-        body: noCors ? new URLSearchParams(payload) : JSON.stringify(payload),
+        headers: noCors ? undefined : { Accept: 'application/json' },
+        body: noCors ? new URLSearchParams(Object.fromEntries(formData.entries())) : formData,
         keepalive: true
       });
       if (!noCors && !response.ok) throw new Error(`HTTP ${response.status}`);
 
       leadForm.reset();
+      leadForm.querySelectorAll('[aria-invalid]').forEach((field) => field.removeAttribute('aria-invalid'));
       leadForm.classList.add('is-sent');
       setStatus('Дякуємо! Заявку отримано. Ми зв’яжемося з вами найближчим часом.', 'success');
-      trackEvent('generate_lead', { form_id: 'lead-form', event_type: data.type || '' });
-      if (typeof window.fbq === 'function') window.fbq('track', 'Lead', { content_name: data.type || 'Event request' });
+      const eventType = String(formData.get('event_type') || '');
+      trackEvent('generate_lead', { form_id: 'lead-form', event_type: eventType });
+      if (typeof window.fbq === 'function') window.fbq('track', 'Lead', { content_name: eventType || 'Event request' });
       formStarted = false;
     } catch (error) {
-      setStatus('Не вдалося надіслати заявку. Спробуйте ще раз або зателефонуйте нам.', 'error');
+      setStatus('Не вдалося надіслати заявку. Спробуйте ще раз або зв’яжіться з нами напряму.', 'error');
       trackEvent('form_submit_error', { message: String(error.message || error) });
     } finally {
+      isSubmitting = false;
       submitButton?.removeAttribute('disabled');
       if (buttonLabel) buttonLabel.textContent = originalLabel;
     }
