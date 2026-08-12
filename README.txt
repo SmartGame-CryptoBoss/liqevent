@@ -41,7 +41,7 @@ GOOGLE SHEETS + TELEGRAM SETUP
 
 ANALYTICS EVENTS
 - GA4 Google tag: G-WRXR3VJPJH (installed directly in index.html)
-- Meta Pixel: 1291132272951915 with PageView and successful Lead tracking
+- Meta Pixel: 1825655221761937 with PageView and successful Lead tracking
 - hero_cta, pricing_cta, mobile_form_cta
 - phone_click, telegram_click
 - form_start, form_validation_error, form_config_missing
