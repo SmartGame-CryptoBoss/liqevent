@@ -14,7 +14,6 @@ Fill only public values:
 - leadEndpoint: public primary Cloudflare Worker URL
 - leadFallbackEndpoint: public Formspree fallback endpoint
 - telegramUrl: public Telegram link, for example https://t.me/your_username
-- metaPixelId: numeric Meta Pixel ID
 
 Never put Telegram bot tokens, CRM keys or other secrets into config.js.
 
@@ -42,6 +41,7 @@ GOOGLE SHEETS + TELEGRAM SETUP
 
 ANALYTICS EVENTS
 - GA4 Google tag: G-WRXR3VJPJH (installed directly in index.html)
+- Meta Pixel: 1291132272951915 with PageView and successful Lead tracking
 - hero_cta, pricing_cta, mobile_form_cta
 - phone_click, telegram_click
 - form_start, form_validation_error, form_config_missing
