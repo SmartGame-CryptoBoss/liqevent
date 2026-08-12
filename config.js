@@ -8,8 +8,5 @@ window.LIQEVENT_CONFIG = Object.freeze({
   leadFallbackEndpoint: 'https://formspree.io/f/xwleowbk',
 
   // Public link only, for example https://t.me/your_public_username
-  telegramUrl: '',
-
-  // Public analytics identifier (not a secret).
-  metaPixelId: ''
+  telegramUrl: ''
 });
