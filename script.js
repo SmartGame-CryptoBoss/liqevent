@@ -16,24 +16,6 @@
     if (typeof window.fbq === 'function') window.fbq('trackCustom', name, params);
   };
 
-  const initMetaPixel = () => {
-    const id = String(config.metaPixelId || '').trim();
-    if (!/^\d{5,}$/.test(id)) return;
-    const fbq = function(){ fbq.callMethod ? fbq.callMethod.apply(fbq, arguments) : fbq.queue.push(arguments); };
-    fbq.queue = [];
-    fbq.loaded = true;
-    fbq.version = '2.0';
-    window.fbq = fbq;
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://connect.facebook.net/en_US/fbevents.js';
-    document.head.append(script);
-    fbq('init', id);
-    fbq('track', 'PageView');
-  };
-
-  initMetaPixel();
-
   window.addEventListener('scroll', () => {
     header?.classList.toggle('scrolled', window.scrollY > 35);
   }, { passive: true });
@@ -212,7 +194,7 @@
         event_type: eventType,
         delivery_channel: deliveryChannel
       });
-      if (typeof window.fbq === 'function') window.fbq('track', 'Lead', { content_name: eventType || 'Event request' });
+      if (typeof window.fbq === 'function') window.fbq('track', 'Lead');
       formStarted = false;
     } catch (error) {
       setStatus('Не вдалося надіслати заявку. Спробуйте ще раз або зв’яжіться з нами напряму.', 'error');
