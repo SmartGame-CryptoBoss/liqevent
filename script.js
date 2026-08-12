@@ -7,23 +7,13 @@
   const mobileMenu = document.querySelector('.mobile-menu');
 
   const trackEvent = (name, params = {}) => {
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event: name, ...params });
-    if (typeof window.gtag === 'function') window.gtag('event', name, params);
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', name, params);
+    } else {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: name, ...params });
+    }
     if (typeof window.fbq === 'function') window.fbq('trackCustom', name, params);
-  };
-
-  const initGA4 = () => {
-    const id = String(config.ga4MeasurementId || '').trim();
-    if (!/^G-[A-Z0-9]+$/i.test(id)) return;
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
-    document.head.append(script);
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function gtag(){ window.dataLayer.push(arguments); };
-    window.gtag('js', new Date());
-    window.gtag('config', id, { anonymize_ip: true });
   };
 
   const initMetaPixel = () => {
@@ -42,7 +32,6 @@
     fbq('track', 'PageView');
   };
 
-  initGA4();
   initMetaPixel();
 
   window.addEventListener('scroll', () => {
