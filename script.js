@@ -70,8 +70,11 @@
 
   const leadForm = document.querySelector('#lead-form');
   const formStatus = document.querySelector('#form-status');
+  const turnstileContainer = document.querySelector('#turnstile-widget');
   let formStarted = false;
   let isSubmitting = false;
+  let turnstileWidgetId = null;
+  let turnstileToken = '';
 
   const setStatus = (message, type = '') => {
     if (!formStatus) return;
@@ -93,6 +96,21 @@
       trackEvent('form_validation_error');
       return false;
     }
+
+    const contactField = leadForm.querySelector('[name="phone_or_telegram"]');
+    const contact = String(contactField?.value || '').trim();
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+    const isTelegram = /^@[a-zA-Z0-9_]{5,}$/.test(contact)
+      || /^(?:https?:\/\/)?(?:t\.me|telegram\.me)\/[a-zA-Z0-9_]{5,}\/?$/i.test(contact);
+    const isPhone = /^\+?[\d\s().-]{7,24}$/.test(contact) && /\d{7}/.test(contact.replace(/\D/g, ''));
+    if (!isEmail && !isTelegram && !isPhone) {
+      contactField?.setAttribute('aria-invalid', 'true');
+      contactField?.focus();
+      setStatus('Вкажіть коректний телефон, Telegram або email.', 'error');
+      trackEvent('form_validation_error', { field: 'contact' });
+      return false;
+    }
+
     return true;
   };
 
@@ -114,7 +132,10 @@
       guests: String(formData.get('guest_count') || '').trim(),
       date: String(formData.get('event_date') || '').trim(),
       budget: String(formData.get('budget') || '').trim(),
-      message: String(formData.get('event_details') || '').trim()
+      message: String(formData.get('event_details') || '').trim(),
+      privacyConsent: formData.get('privacy_consent') === 'Погоджено',
+      website: String(formData.get('_gotcha') || '').trim(),
+      turnstileToken
     };
   };
 
@@ -131,15 +152,59 @@
       keepalive: true
     });
 
-    if (!response.ok) throw new Error(`Lead endpoint returned ${response.status}`);
-
     const result = await response.json().catch(() => null);
+    if (!response.ok) {
+      const error = new Error(result?.error || `Lead endpoint returned ${response.status}`);
+      error.status = response.status;
+      error.code = result?.code || '';
+      throw error;
+    }
     if (result && (result.ok === false || result.success === false)) {
       throw new Error('Lead endpoint rejected the submission');
     }
 
     return result;
   };
+
+  const resetTurnstile = () => {
+    turnstileToken = '';
+    if (turnstileWidgetId !== null && typeof window.turnstile?.reset === 'function') {
+      window.turnstile.reset(turnstileWidgetId);
+    }
+  };
+
+  const renderTurnstile = () => {
+    const sitekey = String(config.turnstileSiteKey || '').trim();
+    if (!turnstileContainer || !sitekey || sitekey === 'LIQEVENT_TURNSTILE_SITEKEY') {
+      setStatus('Антиспам-захист тимчасово недоступний. Зв’яжіться з нами напряму.', 'error');
+      return;
+    }
+    if (typeof window.turnstile?.render !== 'function') {
+      window.setTimeout(renderTurnstile, 120);
+      return;
+    }
+    if (turnstileWidgetId !== null) return;
+    turnstileWidgetId = window.turnstile.render(turnstileContainer, {
+      sitekey,
+      action: 'lead_form',
+      theme: 'light',
+      size: 'flexible',
+      callback: (token) => {
+        turnstileToken = token;
+        if (formStatus?.classList.contains('error')) setStatus('');
+      },
+      'expired-callback': () => {
+        turnstileToken = '';
+        setStatus('Антиспам-перевірка завершилася. Підтвердьте її ще раз.', 'error');
+      },
+      'error-callback': () => {
+        turnstileToken = '';
+        setStatus('Не вдалося виконати антиспам-перевірку. Оновіть сторінку або зв’яжіться з нами напряму.', 'error');
+      }
+    });
+  };
+
+  renderTurnstile();
 
   leadForm?.addEventListener('input', (event) => {
     if (!formStarted) {
@@ -155,12 +220,21 @@
     setStatus('');
     if (!validateForm()) return;
 
+    if (!turnstileToken) {
+      setStatus('Підтвердьте антиспам-перевірку перед надсиланням.', 'error');
+      turnstileContainer?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      trackEvent('form_validation_error', { field: 'turnstile' });
+      return;
+    }
+
     const formData = new FormData(leadForm);
-    if (formData.get('_gotcha')) return;
+    if (formData.get('_gotcha')) {
+      resetTurnstile();
+      return;
+    }
 
     const endpoint = String(config.leadEndpoint || '').trim();
-    const fallbackEndpoint = String(config.leadFallbackEndpoint || leadForm.action || '').trim();
-    if (!isHttpUrl(endpoint) && !isHttpUrl(fallbackEndpoint)) {
+    if (!isHttpUrl(endpoint)) {
       setStatus('Не вдалося надіслати заявку. Спробуйте ще раз або зв’яжіться з нами напряму.', 'error');
       trackEvent('form_config_missing');
       return;
@@ -175,16 +249,11 @@
 
     try {
       const payload = buildLeadPayload(formData);
-      let deliveryChannel = 'worker';
-
-      try {
-        await postLeadJson(endpoint, payload);
-      } catch {
-        deliveryChannel = 'formspree';
-        await postLeadJson(fallbackEndpoint, payload);
-      }
+      const result = await postLeadJson(endpoint, payload);
+      const deliveryChannel = result?.channel === 'formspree' ? 'formspree' : 'telegram';
 
       leadForm.reset();
+      resetTurnstile();
       leadForm.querySelectorAll('[aria-invalid]').forEach((field) => field.removeAttribute('aria-invalid'));
       leadForm.classList.add('is-sent');
       setStatus('Дякуємо! Заявку отримано. Ми зв’яжемося з вами найближчим часом.', 'success');
@@ -197,8 +266,12 @@
       if (typeof window.fbq === 'function') window.fbq('track', 'Lead');
       formStarted = false;
     } catch (error) {
+      resetTurnstile();
       setStatus('Не вдалося надіслати заявку. Спробуйте ще раз або зв’яжіться з нами напряму.', 'error');
-      trackEvent('form_submit_error', { message: String(error.message || error) });
+      trackEvent('form_submit_error', {
+        error_code: String(error.code || 'submission_failed'),
+        response_status: Number(error.status || 0)
+      });
     } finally {
       isSubmitting = false;
       submitButton?.removeAttribute('disabled');
