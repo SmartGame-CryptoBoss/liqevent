@@ -301,7 +301,7 @@
             <a href="mailto:liqevent@gmail.com">LiQevent@gmail.com</a>
           </div>
         </div>
-        <form class="lead-form reveal delay-1" id="lead-form" action="https://formspree.io/f/xwleowbk" method="POST" novalidate>
+        <form class="lead-form reveal delay-1" id="lead-form" novalidate>
           <input type="hidden" name="_subject" value="Нова заявка з liqevent.com">
           <div class="form-row">
             <label>Як до вас звертатися?<input name="client_name" type="text" autocomplete="name" placeholder="Ім'я" required></label>
@@ -319,6 +319,9 @@
           <label>Коротко про задачу<textarea name="event_details" rows="4" placeholder="Місто, мета події, побажання або те, що важливо врахувати…"></textarea></label>
           <label class="form-consent"><input name="privacy_consent" type="checkbox" value="Погоджено" required><span>Погоджуюсь на використання даних виключно для відповіді на мій запит.</span></label>
           <label class="hp-field" aria-hidden="true">Не заповнюйте це поле<input name="_gotcha" type="text" tabindex="-1" autocomplete="off"></label>
+          <div class="turnstile-wrap">
+            <div id="turnstile-widget" aria-label="Антиспам-перевірка Cloudflare Turnstile"></div>
+          </div>
           <button class="btn btn-black" type="submit"><span class="button-label">Надіслати заявку</span> <span>↗</span></button>
           <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
         </form>
@@ -345,7 +348,8 @@
     <a class="quick-primary" href="#contact" data-track="mobile_form_cta"><span aria-hidden="true">✦</span><span>Заявка</span></a>
   </nav>
 
-  <script src="config.js?v=20260812b"></script>
-  <script src="script.js?v=20260812b"></script>
+  <script src="config.js?v=20260814a"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+  <script src="script.js?v=20260814a"></script>
 </body>
 </html>
