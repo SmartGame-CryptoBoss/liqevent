@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "liqevent-leads",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-14",
+  "observability": {
+    "enabled": true
+  },
+  "ratelimits": [
+    {
+      "name": "ATTEMPT_RATE_LIMITER",
+      "namespace_id": "8474433991",
+      "simple": {
+        "limit": 8,
+        "period": 60
+      }
+    },
+    {
+      "name": "LEAD_RATE_LIMITER",
+      "namespace_id": "8474433992",
+      "simple": {
+        "limit": 2,
+        "period": 60
+      }
+    }
+  ]
+}
