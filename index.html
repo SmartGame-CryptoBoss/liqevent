@@ -29,7 +29,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
   <link rel="preload" as="image" href="assets/img/case_rock_stage.webp" type="image/webp" />
-  <link rel="stylesheet" href="styles.css?v=20260902g" />
+  <link rel="stylesheet" href="styles.css?v=20260917a" />
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WRXR3VJPJH"></script>
   <script>
@@ -98,8 +98,9 @@
           <div class="eyebrow"><span></span> ІВЕНТ-АГЕНЦІЯ ПОВНОГО ЦИКЛУ</div>
           <h1>Корпоративні події<br><em>під ключ.</em></h1>
           <p class="hero-lead"><strong>Від концепції до останнього гостя.</strong> Створюємо події, що працюють на емоції, команду та бренд — із повною відповідальністю за результат.</p>
+          <p class="hero-offer"><strong>Для компаній і брендів у Києві та Київській області.</strong> Після заявки уточнимо задачу та підготуємо перший напрям концепції й структуру кошторису.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#contact" data-track="hero_cta">Отримати концепцію та кошторис <span>↗</span></a>
+            <a class="btn btn-primary" href="#contact" data-track="lead_cta_click" data-track-location="hero">Отримати концепцію та кошторис <span>↗</span></a>
             <a class="text-link" href="#cases">Дивитися кейси <span>↓</span></a>
           </div>
           <div class="hero-metrics">
@@ -362,20 +363,27 @@
         </div>
         <form class="lead-form reveal delay-1" id="lead-form" novalidate>
           <input type="hidden" name="_subject" value="Нова заявка з liqevent.com">
-          <div class="form-row">
-            <label>Як до вас звертатися?<input name="client_name" type="text" autocomplete="name" placeholder="Ім'я" required></label>
-            <label>Компанія<input name="company" type="text" autocomplete="organization" placeholder="Назва компанії"></label>
+          <div class="form-intro">
+            <strong>Три поля — і можна починати</strong>
+            <span>Деталі події можна додати зараз або обговорити пізніше.</span>
           </div>
+          <label>Як до вас звертатися?<input name="client_name" type="text" autocomplete="name" placeholder="Ім'я" required></label>
           <label>Телефон або Telegram<input name="phone_or_telegram" type="text" autocomplete="tel" inputmode="tel" placeholder="+380… / @username" required></label>
-          <div class="form-row">
-            <label>Що плануєте?<select name="event_type" required><option value="">Оберіть формат</option><option>Корпоратив</option><option>Тімбілдинг</option><option>Конференція</option><option>Community event</option><option>Інший формат</option></select></label>
-            <label>Кількість гостей<input name="guest_count" type="number" inputmode="numeric" min="1" placeholder="Наприклад, 150"></label>
-          </div>
-          <div class="form-row">
-            <label>Орієнтовна дата<input name="event_date" type="date"></label>
-            <label>Орієнтовний бюджет<input name="budget" type="text" inputmode="numeric" placeholder="₴ / $ / €"></label>
-          </div>
-          <label>Коротко про задачу<textarea name="event_details" rows="4" placeholder="Місто, мета події, побажання або те, що важливо врахувати…"></textarea></label>
+          <label>Що плануєте?<select name="event_type" required><option value="">Оберіть формат</option><option>Корпоратив</option><option>Тімбілдинг</option><option>Конференція</option><option>Community event</option><option>Інший формат</option></select></label>
+          <details class="form-optional">
+            <summary><span>Додати деталі події</span><small>необов’язково</small></summary>
+            <div class="form-optional-fields">
+              <div class="form-row">
+                <label>Компанія<input name="company" type="text" autocomplete="organization" placeholder="Назва компанії"></label>
+                <label>Кількість гостей<input name="guest_count" type="number" inputmode="numeric" min="1" placeholder="Наприклад, 150"></label>
+              </div>
+              <div class="form-row">
+                <label>Орієнтовна дата<input name="event_date" type="date"></label>
+                <label>Орієнтовний бюджет<input name="budget" type="text" inputmode="numeric" placeholder="₴ / $ / €"></label>
+              </div>
+              <label>Коротко про задачу<textarea name="event_details" rows="4" placeholder="Місто, мета події, побажання або те, що важливо врахувати…"></textarea></label>
+            </div>
+          </details>
           <label class="form-consent"><input name="privacy_consent" type="checkbox" value="Погоджено" required><span>Погоджуюсь на використання даних виключно для відповіді на мій запит.</span></label>
           <label class="hp-field" aria-hidden="true">Не заповнюйте це поле<input name="_gotcha" type="text" tabindex="-1" autocomplete="off"></label>
           <div class="turnstile-wrap">
@@ -404,11 +412,11 @@
   <nav class="quick-actions" aria-label="Швидкі контакти">
     <a href="tel:+380637211467" data-track="phone_click"><span aria-hidden="true">☎</span><span>Подзвонити</span></a>
     <a href="#" data-config-link="telegramUrl" data-track="telegram_click" hidden><span aria-hidden="true">➤</span><span>Telegram</span></a>
-    <a class="quick-primary" href="#contact" data-track="mobile_form_cta"><span aria-hidden="true">✦</span><span>Заявка</span></a>
+    <a class="quick-primary" href="#contact" data-track="lead_cta_click" data-track-location="mobile_sticky"><span aria-hidden="true">✦</span><span>Заявка</span></a>
   </nav>
 
   <script src="config.js?v=20260814a"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-  <script src="script.js?v=20260814a"></script>
+  <script src="script.js?v=20260917a"></script>
 </body>
 </html>

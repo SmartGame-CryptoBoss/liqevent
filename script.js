@@ -64,17 +64,33 @@
   document.querySelectorAll('[data-track]').forEach((element) => {
     element.addEventListener('click', () => trackEvent(element.dataset.track, {
       link_url: element.href || '',
-      link_text: element.textContent.trim()
+      link_text: element.textContent.trim(),
+      cta_location: element.dataset.trackLocation || undefined
     }));
   });
 
   const leadForm = document.querySelector('#lead-form');
+  const contactSection = document.querySelector('#contact');
   const formStatus = document.querySelector('#form-status');
   const turnstileContainer = document.querySelector('#turnstile-widget');
   let formStarted = false;
   let isSubmitting = false;
   let turnstileWidgetId = null;
   let turnstileToken = '';
+
+  if (contactSection) {
+    if ('IntersectionObserver' in window) {
+      const contactObserver = new IntersectionObserver((entries) => {
+        const isVisible = entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.3);
+        if (!isVisible) return;
+        trackEvent('contact_view', { section_id: 'contact' });
+        contactObserver.disconnect();
+      }, { threshold: [0.3] });
+      contactObserver.observe(contactSection);
+    } else {
+      trackEvent('contact_view', { section_id: 'contact' });
+    }
+  }
 
   const setStatus = (message, type = '') => {
     if (!formStatus) return;
