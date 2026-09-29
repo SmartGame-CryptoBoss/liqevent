@@ -16,6 +16,11 @@
     if (typeof window.fbq === 'function') window.fbq('trackCustom', name, params);
   };
 
+  const pushDataLayerEvent = (name, params = {}) => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: name, ...params });
+  };
+
   window.addEventListener('scroll', () => {
     header?.classList.toggle('scrolled', window.scrollY > 35);
   }, { passive: true });
@@ -274,11 +279,13 @@
       leadForm.classList.add('is-sent');
       setStatus('Дякуємо! Заявку отримано. Ми зв’яжемося з вами найближчим часом.', 'success');
       const eventType = payload.eventType;
-      trackEvent('generate_lead', {
+      const conversionContext = {
         form_id: 'lead-form',
         event_type: eventType,
         delivery_channel: deliveryChannel
-      });
+      };
+      trackEvent('generate_lead', conversionContext);
+      pushDataLayerEvent('lead_success', conversionContext);
       if (typeof window.fbq === 'function') window.fbq('track', 'Lead');
       formStarted = false;
     } catch (error) {
