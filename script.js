@@ -67,11 +67,19 @@
   });
 
   document.querySelectorAll('[data-track]').forEach((element) => {
-    element.addEventListener('click', () => trackEvent(element.dataset.track, {
-      link_url: element.href || '',
-      link_text: element.textContent.trim(),
-      cta_location: element.dataset.trackLocation || undefined
-    }));
+    element.addEventListener('click', () => {
+      const context = {
+        link_url: element.href || '',
+        link_text: element.textContent.trim(),
+        cta_location: element.dataset.trackLocation || undefined
+      };
+      trackEvent(element.dataset.track, context);
+      // Preserve the historical pricing event while including this route in the CTA total.
+      if (element.dataset.leadCta === 'true' && element.dataset.track !== 'lead_cta_click') {
+        trackEvent('lead_cta_click', context);
+      }
+      if (element.getAttribute('href') === '#lead-form') loadTurnstile();
+    });
   });
 
   const leadForm = document.querySelector('#lead-form');
@@ -82,6 +90,23 @@
   let isSubmitting = false;
   let turnstileWidgetId = null;
   let turnstileToken = '';
+
+  const trackFormEvent = (name, params = {}) => trackEvent(name, {
+    form_id: 'lead-form',
+    funnel_version: 'p1_20261009',
+    ...params
+  });
+
+  // Observe the form introduction, not a percentage of the entire tall form.
+  const formIntro = document.querySelector('#form-intro');
+  if (formIntro && 'IntersectionObserver' in window) {
+    const formObserver = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.5)) return;
+      trackFormEvent('form_view');
+      formObserver.disconnect();
+    }, { threshold: [0.5] });
+    formObserver.observe(formIntro);
+  }
 
   if (contactSection) {
     if ('IntersectionObserver' in window) {
@@ -114,7 +139,7 @@
     if (firstInvalid) {
       firstInvalid.focus();
       setStatus('Будь ласка, заповніть обов’язкові поля.', 'error');
-      trackEvent('form_validation_error');
+      trackFormEvent('form_validation_error', { field: firstInvalid.name });
       return false;
     }
 
@@ -128,7 +153,7 @@
       contactField?.setAttribute('aria-invalid', 'true');
       contactField?.focus();
       setStatus('Вкажіть коректний телефон, Telegram або email.', 'error');
-      trackEvent('form_validation_error', { field: 'contact' });
+      trackFormEvent('form_validation_error', { field: 'contact' });
       return false;
     }
 
@@ -180,8 +205,11 @@
       error.code = result?.code || '';
       throw error;
     }
-    if (result && (result.ok === false || result.success === false)) {
-      throw new Error('Lead endpoint rejected the submission');
+    if (result?.ok !== true || !['telegram', 'formspree'].includes(result.channel)) {
+      const error = new Error('Lead endpoint did not confirm delivery');
+      error.code = 'delivery_unconfirmed';
+      error.status = response.status;
+      throw error;
     }
 
     return result;
@@ -225,12 +253,43 @@
     });
   };
 
-  renderTurnstile();
+  // Start anti-spam verification when the form is near or a visitor requests it.
+  // The token is still mandatory in the browser and independently verified by the Worker.
+  let turnstileLoading = false;
+  const loadTurnstile = () => {
+    if (typeof window.turnstile?.render === 'function') {
+      renderTurnstile();
+      return;
+    }
+    if (turnstileLoading) return;
+    turnstileLoading = true;
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    script.async = true;
+    script.onload = renderTurnstile;
+    script.onerror = () => {
+      turnstileLoading = false;
+      script.remove();
+      setStatus('Не вдалося виконати антиспам-перевірку. Оновіть сторінку або зв’яжіться з нами напряму.', 'error');
+    };
+    document.head.appendChild(script);
+  };
+
+  if (leadForm && 'IntersectionObserver' in window) {
+    const verificationObserver = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      loadTurnstile();
+      verificationObserver.disconnect();
+    }, { rootMargin: '600px 0px', threshold: 0 });
+    verificationObserver.observe(leadForm);
+  } else {
+    loadTurnstile();
+  }
 
   leadForm?.addEventListener('input', (event) => {
     if (!formStarted) {
       formStarted = true;
-      trackEvent('form_start', { form_id: 'lead-form' });
+      trackFormEvent('form_start');
     }
     if (event.target.matches('[aria-invalid="true"]')) event.target.setAttribute('aria-invalid', 'false');
   }, { once: false });
@@ -238,13 +297,14 @@
   leadForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (isSubmitting) return;
+    trackFormEvent('form_submit_attempt');
     setStatus('');
     if (!validateForm()) return;
 
     if (!turnstileToken) {
       setStatus('Підтвердьте антиспам-перевірку перед надсиланням.', 'error');
       turnstileContainer?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      trackEvent('form_validation_error', { field: 'turnstile' });
+      trackFormEvent('form_validation_error', { field: 'turnstile' });
       return;
     }
 
@@ -258,6 +318,7 @@
     if (!isHttpUrl(endpoint)) {
       setStatus('Не вдалося надіслати заявку. Спробуйте ще раз або зв’яжіться з нами напряму.', 'error');
       trackEvent('form_config_missing');
+      trackFormEvent('form_submit_error', { error_code: 'form_config_missing', response_status: 0 });
       return;
     }
 
@@ -291,7 +352,7 @@
     } catch (error) {
       resetTurnstile();
       setStatus('Не вдалося надіслати заявку. Спробуйте ще раз або зв’яжіться з нами напряму.', 'error');
-      trackEvent('form_submit_error', {
+      trackFormEvent('form_submit_error', {
         error_code: String(error.code || 'submission_failed'),
         response_status: Number(error.status || 0)
       });

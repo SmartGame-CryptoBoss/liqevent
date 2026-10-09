@@ -161,3 +161,14 @@
   .gifts-proof-number span{padding-bottom:2px}
   .gifts-proof-copy h3{font-size:28px}
 }
+
+/* P1: immediately available hero/form and readable mobile controls. */
+.hero-copy,.hero-visual,.lead-form{opacity:1;transform:none}
+#lead-form{scroll-margin-top:92px;scroll-margin-bottom:100px}
+.lead-form input:not([type="checkbox"]):not([type="hidden"]),
+.lead-form select,.lead-form textarea{font-size:16px;line-height:1.4;min-height:48px;scroll-margin-top:100px;scroll-margin-bottom:100px}
+@media(max-width:720px){
+  #lead-form{scroll-margin-top:88px;scroll-margin-bottom:calc(90px + env(safe-area-inset-bottom))}
+  .lead-form input:not([type="checkbox"]):not([type="hidden"]),
+  .lead-form select,.lead-form textarea{scroll-margin-top:88px;scroll-margin-bottom:calc(90px + env(safe-area-inset-bottom))}
+}
