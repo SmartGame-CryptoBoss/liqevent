@@ -61,9 +61,13 @@ GOOGLE SHEETS + TELEGRAM SETUP
 ANALYTICS EVENTS
 - GA4 Google tag: G-WRXR3VJPJH (installed directly in index.html)
 - Meta Pixel: 1825655221761937 with PageView and successful Lead tracking
-- hero_cta, pricing_cta, mobile_form_cta
+- lead_cta_click with cta_location (header, hero, mobile menu/sticky, services, gifts, pricing)
+- pricing_cta retained for historical compatibility
 - phone_click, telegram_click
-- form_start, form_validation_error, form_config_missing
+- form_view (at least half of the introduction is visible, once per page)
+- form_start (first input, once until a successful reset)
+- form_submit_attempt (before validation; ignored while a request is in flight)
+- form_validation_error, form_config_missing
 - generate_lead, form_submit_error
 
 SEARCH CONSOLE
@@ -74,3 +78,17 @@ DNS verification is also valid and requires no code change.
 LOCAL CHECK
 Serve the repository root over HTTP, then test desktop and mobile layouts.
 The site is static and deploys from GitHub Pages.
+
+P1 CONVERSION UPDATE — 2026-10-09
+The hero and form do not wait for reveal JavaScript. Application CTAs target
+#lead-form; #contact remains available for the contact section. Query/UTM
+parameters are preserved by native same-page anchors. Required fields and
+backend success delivery rules have not changed. New diagnostic form events
+include form_id and funnel_version=p1_20261009 and contain no entered values.
+Only a confirmed backend success sends generate_lead, lead_success and one
+standard Meta Lead. Formspree remains a Worker-only fallback.
+Turnstile loads on application intent or within 600px of the form; validation
+and mandatory server-side anti-spam checks remain unchanged.
+System fonts are used; no external font download or font preload is needed.
+The optimized transparent WebP logo has 80/160/200px variants. Hero photos
+have 320/640/960/1600px srcset candidates and viewport-specific sizes.
