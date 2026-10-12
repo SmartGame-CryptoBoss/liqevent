@@ -12,6 +12,8 @@
 .field-error:empty{display:none}
 .turnstile-status{color:#a00042;font-size:12px;line-height:1.45;margin:8px 0}
 .turnstile-status:empty{display:none}
+.turnstile-wrap{flex-direction:column;align-items:stretch;gap:8px}
+#turnstile-widget{width:100%;max-width:100%}
 .turnstile-retry{min-height:44px;padding:8px 0;text-decoration:underline;font-size:12px;cursor:pointer;background:none;border:0;text-align:left}
 .lead-form .form-consent{min-height:44px;align-items:center}
 .lead-form .form-consent input{width:24px!important;height:24px;flex-basis:24px}
