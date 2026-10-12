@@ -1,5 +1,3 @@
-import v2Contract from '../../v2/lead-contract.js';
-
 const ALLOWED_ORIGINS = new Set([
   'https://liqevent.com',
   'https://www.liqevent.com'
@@ -105,12 +103,6 @@ const telegramText = (lead) => {
     line('📅', 'Дата', lead.date),
     line('💰', 'Бюджет', lead.budget),
     line('📝', 'Коментар', lead.message),
-    ...(lead.test_id ? [
-      '',
-      line('🧪', 'Test', lead.test_id),
-      line('↔️', 'Variant', lead.variant),
-      line('#', 'Lead reference', lead.lead_ref)
-    ] : []),
     '',
     '🌐 <b>Джерело:</b> liqevent.com'
   ].filter(Boolean).join('\n');
@@ -234,30 +226,19 @@ export const handleRequest = async (request, env, dependencies = {}) => {
     return json(origin, { ok: false, code: 'turnstile_rejected' }, 403);
   }
 
-  // V1 keeps its existing validation and response contract. V2 alone uses the
-  // shared browser/server rules and allowlisted anonymous attribution.
-  const isV2 = ['test_id', 'variant', 'lead_ref'].some(key => Object.hasOwn(input || {}, key));
-  const attribution = isV2 ? v2Contract.validateAttribution(input) : null;
-  if (attribution && !attribution.ok) {
-    return json(origin, { ok: false, code: attribution.code, field: attribution.field }, 422);
-  }
-  const validation = isV2 ? v2Contract.validateLead(input) : validateLead(input);
-  if (!validation.ok) {
-    return json(origin, { ok: false, code: validation.code, ...(isV2 ? { field: validation.field } : {}) }, 422);
-  }
-  const deliveredLead = isV2 ? { ...validation.lead, ...attribution.attribution } : validation.lead;
-  const success = channel => ({ ok: true, channel, ...(isV2 ? attribution.attribution : {}) });
+  const validation = validateLead(input);
+  if (!validation.ok) return json(origin, { ok: false, code: validation.code }, 422);
 
   const leadLimit = await env.LEAD_RATE_LIMITER.limit({ key: rateKey });
   if (!leadLimit.success) {
     return json(origin, { ok: false, code: 'lead_rate_limited' }, 429, { 'Retry-After': '60' });
   }
 
-  const telegramDelivered = await sendTelegram(deliveredLead, env, fetchImpl).catch(() => false);
-  if (telegramDelivered) return json(origin, success('telegram'));
+  const telegramDelivered = await sendTelegram(validation.lead, env, fetchImpl).catch(() => false);
+  if (telegramDelivered) return json(origin, { ok: true, channel: 'telegram' });
 
-  const fallbackDelivered = await sendFormspreeFallback(deliveredLead, env, fetchImpl).catch(() => false);
-  if (fallbackDelivered) return json(origin, success('formspree'));
+  const fallbackDelivered = await sendFormspreeFallback(validation.lead, env, fetchImpl).catch(() => false);
+  if (fallbackDelivered) return json(origin, { ok: true, channel: 'formspree' });
 
   return json(origin, { ok: false, code: 'delivery_failed' }, 502);
 };
