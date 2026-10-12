@@ -280,7 +280,8 @@
       sitekey,
       action: 'lead_form',
       theme: 'light',
-      size: 'flexible',
+      // Flexible has a 300px minimum. Compact fits narrow form interiors.
+      size: turnstileContainer.clientWidth < 300 ? 'compact' : 'flexible',
       callback: (token) => {
         turnstileToken = token;
         setTurnstileStatus('');
