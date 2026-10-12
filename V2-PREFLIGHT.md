@@ -13,7 +13,7 @@ The root `index.html`, `script.js`, `styles.css`, public `config.js`, GTM snippe
 
 `v2/lead-contract.js` is the single source of validation for the browser and the V2 branch of the Worker: trimmed name length, phone/Telegram/email parsing, event type, consent, optional guests/date and length constraints. Optional details remain optional. Invalid optional inputs open the details panel and show a field-specific error.
 
-CAPTCHA status is separate from field/delivery errors. A refreshed token clears only CAPTCHA errors. Retry and expiry retain entered values. Pending disables submit and ignores concurrent submissions.
+CAPTCHA status is separate from field/delivery errors. A refreshed token clears only CAPTCHA errors. Retry and expiry retain entered values. Pending disables submit and ignores concurrent submissions. CAPTCHA status/retry stack below the widget. Forms narrower than 300 px use the supported compact size; wider forms use flexible. Token verification remains mandatory.
 
 Each valid V2 POST includes the allowlisted `test_id=liq_v2_landing_202610`, `variant=control|corporate` and a random UUID `lead_ref`. These survive Telegram delivery and Formspree fallback. The Worker echoes them only on confirmed delivery. The browser rejects success with missing or mismatched attribution. Client-supplied identifiers are attribution metadata, not proof of business qualification or an authentication mechanism.
 
@@ -29,7 +29,7 @@ Run from the repository root:
 node --test test/*.cjs worker/test/*.js
 ```
 
-36 tests cover legacy V1 responses/protection, validation, client bypass, anonymous attribution, backend-confirmed success, fallback, pending, failed/unconfirmed delivery, scoped errors, and the allowed differences between routes.
+38 tests cover legacy V1 responses/protection, validation, client bypass, anonymous attribution, backend-confirmed success, fallback, pending, failed/unconfirmed delivery, scoped errors, and the allowed differences between routes.
 
 The Worker bundle passed Wrangler 4.149.0 `deploy --dry-run`. No upload or deployment occurred. The rate-limit configuration is unchanged.
 
