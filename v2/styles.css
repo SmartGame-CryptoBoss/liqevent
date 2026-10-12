@@ -1,0 +1,27 @@
+/* Shared V2 form fixes apply only on the two V2 routes. Root P1 CSS is untouched. */
+.v2-form-panel{align-self:start;min-width:0;scroll-margin-top:92px}
+.v2-conversion-block{padding:28px;background:#f8f3ef;border-radius:28px;margin-bottom:18px;color:#17171a}
+.v2-conversion-block h3{font-size:27px;line-height:1.15;letter-spacing:-.025em;margin:0 0 18px}
+.v2-conversion-block p{font-size:15px;line-height:1.55;margin:0 0 14px}
+.v2-case-proof{display:flex;align-items:center;gap:14px;margin:20px 0;font-size:12px;line-height:1.4}
+.v2-case-proof img{width:100px;height:74px;object-fit:cover;border-radius:12px;flex-shrink:0}
+.v2-case-proof strong{display:block;margin-top:6px;text-decoration:underline}
+.v2-conversion-block>.btn{width:100%;min-height:48px;font-size:14px}
+.lead-form .field-hint{display:block;margin-top:8px;font-size:11px;line-height:1.45;font-weight:500;letter-spacing:0;text-transform:none;color:#59515a}
+.field-error{display:block;font-size:12px;line-height:1.45;font-weight:600;text-transform:none;letter-spacing:0;color:#a00042;margin-top:6px}
+.field-error:empty{display:none}
+.turnstile-status{color:#a00042;font-size:12px;line-height:1.45;margin:8px 0}
+.turnstile-status:empty{display:none}
+.turnstile-retry{min-height:44px;padding:8px 0;text-decoration:underline;font-size:12px;cursor:pointer;background:none;border:0;text-align:left}
+.lead-form .form-consent{min-height:44px;align-items:center}
+.lead-form .form-consent input{width:24px!important;height:24px;flex-basis:24px}
+@media(max-width:720px){
+  .v2-form-panel{scroll-margin-top:88px;scroll-margin-bottom:calc(90px + env(safe-area-inset-bottom))}
+  .v2-conversion-block{padding:24px}
+  .v2-conversion-block h3{font-size:24px}
+  .v2-case-proof{gap:12px}
+  .v2-case-proof img{width:80px;height:68px}
+  .hero-copy,.hero-visual,.gifts-copy{min-width:0}
+  .hero-visual{width:100%;max-width:100%}
+}
+@media(max-width:360px){.gifts-copy h2{font-size:clamp(42px,13.75vw,50px)}}
