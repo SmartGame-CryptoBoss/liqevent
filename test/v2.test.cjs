@@ -12,7 +12,7 @@ const env = () => ({ TURNSTILE_SECRET_KEY: 'OFFLINE', BOT_TOKEN: 'OFFLINE', CHAT
   ATTEMPT_RATE_LIMITER: { limit: async () => ({ success: true }) }, LEAD_RATE_LIMITER: { limit: async () => ({ success: true }) } });
 const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 
-function fixture({ variant = 'control', mode = 'telegram', delay, responseOverride } = {}) {
+function fixture({ variant = 'control', mode = 'telegram', delay, responseOverride, widgetWidth = 312 } = {}) {
   const events = [], pixels = [], posts = [], deliveries = [], observers = [];
   const values = { client_name: 'Тест', phone_or_telegram: '+380 63 111 11 11', event_type: 'Корпоратив', privacy_consent: 'Погоджено', company: '', guest_count: '', event_date: '', budget: '', event_details: '', _gotcha: '' };
   const make = (extra = {}) => {
@@ -35,7 +35,7 @@ function fixture({ variant = 'control', mode = 'telegram', delay, responseOverri
     querySelectorAll: selector => selector === '[aria-invalid]' ? Object.values(fields).filter(f => 'aria-invalid' in f.attrs) : [],
     querySelector: selector => selector === '[aria-invalid="true"]' ? Object.values(fields).find(f => f.attrs['aria-invalid'] === 'true') : button,
     reset: () => { Object.keys(values).forEach(k => { values[k] = ''; }); } });
-  const status = make(), captchaStatus = make(), widget = make(), intro = make(), contact = make(), retry = make();
+  const status = make(), captchaStatus = make(), widget = make({ clientWidth: widgetWidth }), intro = make(), contact = make(), retry = make();
   const hero = make({ href: 'https://liqevent.com/v2-control/?email=DO_NOT_SEND#form-panel', textContent: 'CTA', dataset: { track: 'lead_cta_click', trackLocation: 'hero' } });
   hero.setAttribute('href', '#form-panel');
   const window = { LIQEVENT_CONFIG: { leadEndpoint: 'https://example.test/', turnstileSiteKey: 'OFFLINE' }, LIQEVENT_LEAD_CONTRACT: contract,
@@ -66,7 +66,7 @@ function fixture({ variant = 'control', mode = 'telegram', delay, responseOverri
   return { window, values, fields, form, posts, deliveries, events, pixels, status, captchaStatus, errors, optional, button,
     submit: () => form.handlers.submit({ preventDefault() {} }),
     edit: name => form.handlers.input({ type: 'input', target: fields[name] }),
-    refresh: () => captchaOptions.callback('NEW_TOKEN'), expire: () => captchaOptions['expired-callback'](),
+    refresh: () => captchaOptions.callback('NEW_TOKEN'), expire: () => captchaOptions['expired-callback'](), captchaSize: () => captchaOptions.size,
     count: name => events.filter(e => e[1] === name).length,
     standard: () => pixels.filter(e => e[0] === 'track' && e[1] === 'Lead').length };
 }
@@ -175,3 +175,11 @@ test('the two routes differ only by assigned arm, conversion block, and website 
     .replace('<span class="button-label">Обговорити корпоратив</span>', '<span class="button-label">Надіслати заявку</span>');
   assert.equal(b, a);
 });
+
+for (const [width, size] of [[242, 'compact'], [312, 'flexible']]) {
+  test('Turnstile fits a ' + width + 'px form interior without weakening verification', async () => {
+    const f = fixture({ widgetWidth: width });
+    assert.equal(f.captchaSize(), size);
+    await f.submit(); assert.equal(f.standard(), 1);
+  });
+}
