@@ -172,3 +172,19 @@
   .lead-form input:not([type="checkbox"]):not([type="hidden"]),
   .lead-form select,.lead-form textarea{scroll-margin-top:88px;scroll-margin-bottom:calc(90px + env(safe-area-inset-bottom))}
 }
+
+
+/* Approved B2B offer and FAQ, 2026-10-21. */
+#b2b-offer,#faq{scroll-margin-top:100px}
+.b2b-offer{padding:88px 0;border-top:1px solid var(--line)}
+.b2b-offer-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
+.b2b-offer-grid>*{min-width:0}
+.b2b-offer h2{font-size:clamp(36px,4.3vw,60px);line-height:1.04;letter-spacing:-.04em;margin:24px 0}
+.b2b-offer-scope,.b2b-offer-next>p{font-size:17px;line-height:1.65;color:#c8c7c8}
+.b2b-offer-next .btn{margin:8px 0 18px}
+.b2b-offer-next .b2b-offer-timing{font-size:14px;color:#aaa9ac;margin:0}
+.faq .accordion ul{max-width:700px;margin:0 0 26px;padding-left:22px;color:#666;line-height:1.6}
+.faq .accordion li{margin:8px 0}
+.faq .accordion summary{overflow-wrap:anywhere}
+@media(max-width:720px){.b2b-offer{padding:60px 0}.b2b-offer-grid{grid-template-columns:1fr;gap:20px}.b2b-offer h2{font-size:clamp(32px,8.5vw,46px)}.b2b-offer-next .btn{width:100%}}
+@media(max-width:360px){.gifts-shell{grid-template-columns:minmax(0,1fr)}.gifts-shell>*{min-width:0}.gifts-copy h2{font-size:44px}}
