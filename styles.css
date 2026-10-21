@@ -187,4 +187,4 @@
 .faq .accordion li{margin:8px 0}
 .faq .accordion summary{overflow-wrap:anywhere}
 @media(max-width:720px){.b2b-offer{padding:60px 0}.b2b-offer-grid{grid-template-columns:1fr;gap:20px}.b2b-offer h2{font-size:clamp(32px,8.5vw,46px)}.b2b-offer-next .btn{width:100%}}
-@media(max-width:360px){.gifts-shell{grid-template-columns:minmax(0,1fr)}.gifts-shell>*{min-width:0}.gifts-copy h2{font-size:44px}}
+@media(max-width:360px){.gifts-shell{grid-template-columns:minmax(0,1fr)}.gifts-shell>*{min-width:0}.gifts-copy h2{font-size:44px}.contact-grid{grid-template-columns:minmax(0,1fr)}.contact-grid>*{min-width:0}.lead-form{width:calc(100% + 30px);margin-inline:-15px;padding:10px}}
