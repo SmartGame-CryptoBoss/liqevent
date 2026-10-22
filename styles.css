@@ -188,3 +188,22 @@
 .faq .accordion summary{overflow-wrap:anywhere}
 @media(max-width:720px){.b2b-offer{padding:60px 0}.b2b-offer-grid{grid-template-columns:1fr;gap:20px}.b2b-offer h2{font-size:clamp(32px,8.5vw,46px)}.b2b-offer-next .btn{width:100%}}
 @media(max-width:360px){.gifts-shell{grid-template-columns:minmax(0,1fr)}.gifts-shell>*{min-width:0}.gifts-copy h2{font-size:44px}.contact-grid{grid-template-columns:minmax(0,1fr)}.contact-grid>*{min-width:0}.lead-form{width:calc(100% + 30px);margin-inline:-15px;padding:10px}}
+
+/* Approved B2B case cards, 2026-10-22. */
+.approved-case-cards .case-teaser{display:grid;grid-template-columns:1.13fr 1fr;gap:64px;align-items:center;border-top:1px solid var(--line);padding:64px 0;scroll-margin-top:100px}
+.approved-case-cards .case-teaser:nth-child(2){grid-template-columns:1fr 1.13fr}
+.approved-case-cards .case-teaser:nth-child(2) .teaser-image{order:2}
+.approved-case-cards .teaser-image{display:block;position:relative;border-radius:24px;overflow:hidden;background:var(--bg2)}
+.approved-case-cards .teaser-image img{width:100%;height:auto;aspect-ratio:1.2;object-fit:cover;transition:transform .4s}
+.approved-case-cards .teaser-image:hover img{transform:scale(1.025)}
+.approved-case-cards .image-index{position:absolute;left:20px;bottom:18px;font-size:10px;letter-spacing:.1em;background:rgba(17,18,20,.75);border:1px solid #ffffff25;padding:8px 12px;border-radius:30px}
+.approved-case-cards .eyebrow{display:flex;align-items:center;gap:12px;font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#c2bcc1;line-height:1.5}
+.approved-case-cards .eyebrow>span{display:inline-block;width:28px;height:2px;background:var(--pink);flex-shrink:0}
+.approved-case-cards .teaser-copy h2{font-size:clamp(30px,3vw,44px);letter-spacing:-.04em;line-height:1.07;margin:20px 0}
+.approved-case-cards .teaser-copy>p:not(.eyebrow){font-size:15px;line-height:1.7;color:var(--muted);margin-bottom:24px}
+.approved-case-cards .text-link{display:inline-flex;align-items:center;gap:22px;padding:12px 0;border-bottom:1px solid #ffffff44;font-size:13px;font-weight:800}
+.approved-case-cards .text-link span{color:var(--pink)}
+.approved-case-cards a:focus-visible{outline:3px solid var(--pink);outline-offset:6px}
+@media(max-width:1050px){.approved-case-cards .case-teaser,.approved-case-cards .case-teaser:nth-child(2){gap:35px}}
+@media(max-width:720px){.approved-case-cards .case-teaser,.approved-case-cards .case-teaser:nth-child(2){grid-template-columns:minmax(0,1fr);gap:25px;padding:38px 0}.approved-case-cards .case-teaser:nth-child(2) .teaser-image{order:0}.approved-case-cards .teaser-image img{aspect-ratio:1.4}.approved-case-cards .teaser-copy h2{font-size:32px;margin-top:15px}.approved-case-cards .teaser-copy>p:not(.eyebrow){font-size:14px}.approved-case-cards .teaser-image{border-radius:18px}.approved-case-cards .image-index{left:12px;bottom:12px}.approved-case-cards .eyebrow{font-size:10px;letter-spacing:.12em}}
+.approved-case-cards #annual-meeting .teaser-image img{aspect-ratio:auto;object-fit:contain;transform:none}
