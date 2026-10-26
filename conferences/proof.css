@@ -1,0 +1,73 @@
+/* Approved convention proof; selectors are isolated from the existing page. */
+#conference-proof{padding:70px 0 80px;background:#111214;color:#f7f5f2}
+#conference-proof>.container{width:min(1240px,calc(100% - 64px));margin-inline:auto}
+#conference-proof .proof-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:40px}
+#conference-proof .eyebrow{font-size:10px;font-weight:800;letter-spacing:.14em;display:flex;align-items:center;gap:10px;line-height:1.5}
+#conference-proof .eyebrow>span{width:28px;height:2px;background:var(--pink);flex-shrink:0}
+#conference-proof .section-number{font-size:10px;letter-spacing:.08em;color:#938d97;margin:0}
+#conference-proof .proof-layout{display:grid;grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr);gap:62px;align-items:start}
+#conference-proof .proof-copy,#conference-proof .proof-gallery{min-width:0}
+#conference-proof h2{font-size:clamp(42px,4.55vw,65px);font-weight:850;line-height:1.03;letter-spacing:-.06em;margin:0}
+#conference-proof h2 em{font-style:normal;color:var(--pink)}
+#conference-proof .proof-intro{font-size:16px;line-height:1.65;color:#bcb6be;max-width:440px;margin:27px 0 0}
+#conference-proof .proof-facts{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:34px 0 35px;padding:22px 0 25px;border-block:1px solid var(--line)}
+#conference-proof .proof-facts dt{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#a69fa9;margin-bottom:11px}
+#conference-proof .proof-facts dd{margin:0;font-size:clamp(22px,2.2vw,32px);line-height:1.1;letter-spacing:-.04em;font-weight:750}
+#conference-proof .proof-facts>div:first-child dd{color:var(--pink)}
+#conference-proof h3{font-size:12px;font-weight:800;letter-spacing:.025em;margin:0 0 18px}
+#conference-proof .proof-scope{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+#conference-proof .proof-scope li{display:flex;gap:12px;align-items:baseline;font-size:14px;line-height:1.5;color:#d3cdd7}
+#conference-proof .proof-scope li>span{color:var(--pink);font-size:14px}
+#conference-proof .catering-note{color:#a89fac;font-size:12px;line-height:1.6;margin:23px 0 0;padding-top:19px;border-top:1px solid var(--line)}
+#conference-proof .proof-photo{background:var(--bg2);border:1px solid var(--line);border-radius:15px;overflow:hidden;min-width:0;margin:0}
+#conference-proof .photo-open{display:block;width:100%;position:relative;border:0;padding:0;background:var(--bg2);color:var(--text);cursor:zoom-in}
+#conference-proof .photo-open img{width:100%;height:auto;aspect-ratio:16/9;object-fit:contain}
+#conference-proof .photo-expand{position:absolute;right:10px;bottom:10px;display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid #ffffff70;border-radius:50%;background:#111214b3;color:white;font-size:14px}
+#conference-proof .proof-photo figcaption{display:block;padding:12px 14px;font-size:12px;line-height:1.5;color:#c7bfcb}
+#conference-proof .proof-photo--main{border-radius:22px}
+#conference-proof .proof-photo--main figcaption{padding:15px 18px}
+#conference-proof .proof-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+#conference-proof .video-note{font-size:12px;color:#928b98;margin:14px 0 0;line-height:1.5}
+#conference-proof :focus-visible,#conference-proof-dialog :focus-visible{outline:3px solid var(--pink);outline-offset:4px}
+#conference-proof-dialog{box-sizing:border-box;border:1px solid var(--line);padding:18px;background:#111214;color:#f7f5f2;border-radius:18px;width:min(1200px,calc(100% - 32px));max-height:92vh}
+#conference-proof-dialog::backdrop{background:#000d}
+#conference-proof-dialog figure{margin:12px 0 0}
+#conference-proof-dialog img{display:block;width:100%;height:auto;max-height:74vh;object-fit:contain}
+#conference-proof-dialog figcaption{font-size:13px;line-height:1.6;padding-top:14px}
+#conference-proof-dialog .proof-dialog-close{display:flex;align-items:center;gap:20px;margin-left:auto;background:transparent;border:0;color:#f7f5f2;font-size:12px;padding:8px;cursor:pointer}
+#conference-proof-dialog .proof-dialog-close span{font-size:24px;line-height:1}
+@media(max-width:1000px){
+ #conference-proof .proof-layout{gap:34px;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)}
+ #conference-proof h2{font-size:clamp(36px,4.6vw,48px)}
+ #conference-proof .proof-facts dd{font-size:23px}
+ #conference-proof .proof-scope li{font-size:13px}
+ #conference-proof .proof-intro{font-size:15px}
+}
+@media(max-width:720px){
+ #conference-proof{padding-block:43px 48px}
+ #conference-proof>.container{width:calc(100% - 40px)}
+ #conference-proof .proof-heading{margin-bottom:28px}
+ #conference-proof .eyebrow{font-size:9px;letter-spacing:.1em;gap:8px}
+ #conference-proof .eyebrow>span{width:22px}
+ #conference-proof .section-number{display:none}
+ #conference-proof .proof-layout{grid-template-columns:1fr;gap:31px}
+ #conference-proof h2{font-size:clamp(37px,10.7vw,52px);line-height:1.04;letter-spacing:-.055em}
+ #conference-proof .proof-intro{font-size:15px;margin-top:21px;line-height:1.6}
+ #conference-proof .proof-facts{margin:26px 0;padding-block:18px 21px;gap:15px}
+ #conference-proof .proof-facts dt{font-size:9px}
+ #conference-proof .proof-facts dd{font-size:26px}
+ #conference-proof h3{margin-bottom:17px}
+ #conference-proof .proof-scope{gap:10px}
+ #conference-proof .proof-scope li{font-size:14px;line-height:1.5}
+ #conference-proof .catering-note{margin-top:20px;padding-top:17px}
+ #conference-proof .proof-detail-grid{gap:10px;margin-top:10px}
+ #conference-proof .proof-photo{border-radius:11px}
+ #conference-proof .proof-photo--main{border-radius:17px}
+ #conference-proof .proof-photo figcaption{padding:10px;font-size:12px;line-height:1.5}
+ #conference-proof .proof-photo--main figcaption{padding:12px 14px}
+ #conference-proof .photo-expand{right:7px;bottom:7px;width:21px;height:21px;font-size:11px}
+ #conference-proof .video-note{margin-top:12px}
+ #conference-proof-dialog{padding:10px;border-radius:12px}
+ #conference-proof-dialog figcaption{font-size:12px}
+ #conference-proof-dialog .proof-dialog-close{font-size:11px}
+}
