@@ -1,0 +1,18 @@
+/* Approved anonymous convention card; isolated from other conference sections. */
+#conference-proof{padding:60px 0 70px;background:#111214;color:#f7f5f2}
+#conference-proof>.container{width:min(1240px,calc(100% - 64px));margin-inline:auto}
+#conference-proof .eyebrow{display:flex;align-items:center;gap:12px;font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#c2bcc1;line-height:1.5}
+#conference-proof .eyebrow>span{display:inline-block;width:28px;height:2px;background:var(--pink);flex-shrink:0}
+#conference-proof .conference-card{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);border:1px solid var(--line);border-radius:24px;overflow:hidden;background:#191a1d}
+#conference-proof .conference-card-image{display:flex;align-items:center;min-width:0;background:#0f1011;position:relative}
+#conference-proof .conference-card-image img{display:block;width:100%;height:auto;aspect-ratio:auto;object-fit:contain}
+#conference-proof .conference-card-copy{min-width:0;padding:36px}
+#conference-proof .conference-card-copy h2{font-size:clamp(29px,3vw,42px);font-weight:800;line-height:1.08;letter-spacing:-.035em;margin:16px 0 20px}
+#conference-proof .conference-card-copy h2 em{font-style:normal;color:var(--pink)}
+#conference-proof .conference-card-copy p:not(.eyebrow){font-size:15px;line-height:1.7;color:#b8b7b7}
+#conference-proof .card-facts{display:flex;flex-wrap:wrap;gap:8px;margin:25px 0}
+#conference-proof .card-facts span{font-size:11px;line-height:1.5;background:#252328;border:1px solid #ffffff12;padding:8px 12px;border-radius:20px}
+#conference-proof .card-link{margin-top:4px;display:inline-flex;align-items:center;gap:22px;padding:12px 0;border-bottom:1px solid #ffffff44;font-size:13px;font-weight:800}
+#conference-proof .card-link span{color:var(--pink)}
+#conference-proof :focus-visible{outline:3px solid var(--pink);outline-offset:5px}
+@media(max-width:720px){#conference-proof{padding:40px 0 48px}#conference-proof>.container{width:calc(100% - 40px)}#conference-proof .conference-card{grid-template-columns:minmax(0,1fr);border-radius:18px}#conference-proof .conference-card-copy{padding:24px 22px 27px}#conference-proof .conference-card-copy h2{font-size:32px}#conference-proof .conference-card-copy p:not(.eyebrow){font-size:14px}#conference-proof .card-facts{margin:20px 0}#conference-proof .eyebrow{font-size:10px;letter-spacing:.12em}}
