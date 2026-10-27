@@ -20,24 +20,24 @@
     image.alt = `Telegram-відгук клієнта після події, ${review.year}`;
     image.decoding = 'async';
     if (original) {
-      image.src = `/assets/img/testimonials/${review.id}-original.webp`;
+      image.src = `/assets/img/testimonials/${review.id}-original-names.webp`;
       [image.width, image.height] = review.original;
       imageArea.replaceChildren(image);
     } else {
       const picture = document.createElement('picture');
       const source = document.createElement('source');
       source.media = '(max-width: 720px)';
-      source.srcset = `/assets/img/testimonials/${review.id}-mobile.webp`;
+      source.srcset = `/assets/img/testimonials/${review.id}-mobile-names.webp`;
       source.width = review.mobile[0];
       source.height = review.mobile[1];
-      image.src = `/assets/img/testimonials/${review.id}-reading.webp`;
+      image.src = `/assets/img/testimonials/${review.id}-reading-names.webp`;
       [image.width, image.height] = review.reading;
       picture.append(source, image);
       imageArea.replaceChildren(picture);
     }
     document.getElementById('dialog-hint').textContent = original
-      ? 'Початкове компонування, ім’я приховано. На вузькому екрані скрін можна прокручувати вбік.'
-      : 'Ім’я приховано. Дата та текст повідомлення збережені.';
+      ? 'Початкове компонування. На вузькому екрані скрін можна прокручувати вбік.'
+      : 'Дата та текст повідомлення збережені.';
     imageArea.scrollLeft = 0;
   }
 
