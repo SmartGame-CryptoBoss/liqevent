@@ -83,6 +83,30 @@
   });
 
   const leadForm = document.querySelector('#lead-form');
+  // Use one deterministic landing position for every application CTA. Long native
+  // smooth anchor jumps can stop early in mobile Safari; never focus an input here.
+  if (leadForm) {
+    const showLeadForm = (event) => {
+      if (event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      closeMenu();
+      if (window.location.hash !== '#lead-form') {
+        window.history.pushState(window.history.state, '', '#lead-form');
+      }
+      window.requestAnimationFrame(() => {
+        const root = document.documentElement;
+        const previousBehavior = root.style.scrollBehavior;
+        root.style.scrollBehavior = 'auto';
+        const headerBottom = Math.max(0, header?.getBoundingClientRect().bottom || 0);
+        const top = Math.max(0, window.scrollY + leadForm.getBoundingClientRect().top - headerBottom - 12);
+        window.scrollTo({ top, behavior: 'auto' });
+        root.style.scrollBehavior = previousBehavior;
+      });
+    };
+    document.querySelectorAll('a[href="#lead-form"]').forEach((link) => {
+      link.addEventListener('click', showLeadForm);
+    });
+  }
   const contactSection = document.querySelector('#contact');
   const formStatus = document.querySelector('#form-status');
   const turnstileContainer = document.querySelector('#turnstile-widget');
