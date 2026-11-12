@@ -186,6 +186,11 @@
 
   const isHttpUrl = (value) => /^https?:\/\//i.test(String(value || '').trim());
 
+  const attributionSubmission = () => {
+    try { return window.LIQEVENT_ATTRIBUTION?.submission() || { attribution_context: { schema_version: 1, status: 'capture_unavailable' } }; }
+    catch { return { attribution_context: { schema_version: 1, status: 'capture_unavailable' } }; }
+  };
+
   const buildLeadPayload = (formData) => {
     const contact = String(formData.get('phone_or_telegram') || '').trim();
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
@@ -205,6 +210,7 @@
       message: String(formData.get('event_details') || '').trim(),
       privacyConsent: formData.get('privacy_consent') === 'Погоджено',
       website: String(formData.get('_gotcha') || '').trim(),
+      ...attributionSubmission(),
       turnstileToken
     };
   };
@@ -212,13 +218,15 @@
   const postLeadJson = async (endpoint, payload) => {
     if (!isHttpUrl(endpoint)) throw new Error('Lead endpoint is not configured');
 
+    let requestPayload = payload;
+    try { requestPayload = window.LIQEVENT_ATTRIBUTION_API?.fitPayload(payload) || payload; } catch {}
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json'
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(requestPayload),
       keepalive: true
     });
 
