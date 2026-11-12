@@ -1,4 +1,5 @@
 import v2Contract from '../../v2/lead-contract.js';
+import { attributionRecord, appendAttribution, validSubmissionId } from './attribution.js';
 
 const ALLOWED_ORIGINS = new Set([
   'https://liqevent.com',
@@ -91,7 +92,7 @@ const telegramText = (lead) => {
   const line = (emoji, label, value) => value
     ? `${emoji} <b>${label}:</b> ${escapeHtml(value)}`
     : '';
-  return [
+  const base = [
     '🎉 <b>НОВА ЗАЯВКА — LIQ EVENT</b>',
     '',
     line('👤', 'Імʼя', lead.name),
@@ -114,6 +115,7 @@ const telegramText = (lead) => {
     '',
     '🌐 <b>Джерело:</b> liqevent.com'
   ].filter(Boolean).join('\n');
+  return appendAttribution(base, lead);
 };
 
 const verifyTurnstile = async (token, ip, env, fetchImpl, idempotencyKey) => {
@@ -245,20 +247,34 @@ export const handleRequest = async (request, env, dependencies = {}) => {
   if (!validation.ok) {
     return json(origin, { ok: false, code: validation.code, ...(isV2 ? { field: validation.field } : {}) }, 422);
   }
-  const deliveredLead = isV2 ? { ...validation.lead, ...attribution.attribution } : validation.lead;
-  const success = channel => ({ ok: true, channel, ...(isV2 ? attribution.attribution : {}) });
+  // Optional website context is separate from the existing V2 assignment contract.
+  const deliveryRecord = attributionRecord(input?.attribution_context, validSubmissionId(input?.submission_id) || uuid(),
+    dependencies.now ? dependencies.now() : Date.now());
+  const deliveredLead = { ...(isV2 ? { ...validation.lead, ...attribution.attribution } : validation.lead),
+    ...deliveryRecord };
+  const success = channel => ({ ok: true, channel, ...(isV2 ? attribution.attribution : {}),
+    ...(Object.hasOwn(input, 'attribution_context')
+      ? { submission_id: deliveryRecord.submission_id, received_at: deliveryRecord.received_at } : {}) });
 
   const leadLimit = await env.LEAD_RATE_LIMITER.limit({ key: rateKey });
   if (!leadLimit.success) {
     return json(origin, { ok: false, code: 'lead_rate_limited' }, 429, { 'Retry-After': '60' });
   }
 
+  const logDelivery = channel => {
+    // Join future invocations to Telegram without logging PII, click IDs or tokens.
+    try { (dependencies.log || console.info)({event: 'lead_delivery',
+      submission_id: deliveryRecord.submission_id, received_at: deliveryRecord.received_at,
+      channel, attribution_status: deliveryRecord.attribution_context.status}); } catch {}
+  };
+
   const telegramDelivered = await sendTelegram(deliveredLead, env, fetchImpl).catch(() => false);
-  if (telegramDelivered) return json(origin, success('telegram'));
+  if (telegramDelivered) { logDelivery('telegram'); return json(origin, success('telegram')); }
 
   const fallbackDelivered = await sendFormspreeFallback(deliveredLead, env, fetchImpl).catch(() => false);
-  if (fallbackDelivered) return json(origin, success('formspree'));
+  if (fallbackDelivered) { logDelivery('formspree'); return json(origin, success('formspree')); }
 
+  logDelivery('failed');
   return json(origin, { ok: false, code: 'delivery_failed' }, 502);
 };
 
