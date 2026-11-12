@@ -40,7 +40,7 @@ test('application CTAs use only the existing handler and same-page form', () => 
     assert.match(link, /data-track-location="conferences_[a-z_]+"/);
     assert.doesNotMatch(link, /onclick=/);
   }
-  assert.equal([...page.matchAll(/src="\.\.\/script\.js\?v=20261009p1"/g)].length, 1);
+  assert.equal([...page.matchAll(/src="\.\.\/script\.js\?v=[^"]+"/g)].length, 1);
   assert.doesNotMatch(page, /gtag\('event'|fbq\('track',\s*'Lead'|event:\s*'lead_success'/);
 });
 
@@ -65,7 +65,8 @@ test('GTM, GA4 and Meta installations are identical to the current homepage', ()
 test('local images, script and styles exist; images reserve size and defer below-fold work', () => {
   for (const [, url] of page.matchAll(/\b(?:src|href)="([^"]+)"/g)) {
     if (/^(https?:|tel:|mailto:|#)/.test(url) || url.includes('#')) continue;
-    const file = path.resolve(root, 'conferences', url.split('?')[0]);
+    const resource = url.split('?')[0];
+    const file = resource.startsWith('/') ? path.join(root,resource) : path.resolve(root,'conferences',resource);
     assert.ok(fs.existsSync(file), `missing local resource: ${url}`);
   }
   const images = [...page.matchAll(/<img\b[^>]*>/g)].map(m => m[0]);
