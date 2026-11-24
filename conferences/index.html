@@ -305,7 +305,7 @@
           <div class="eyebrow black"><span></span> ПОЧНЕМО З ВАШОЇ ЗАДАЧІ</div>
           <h2 id="contact-title">Обговорімо<br><em>конференцію.</em></h2>
           <p>Залиште контакт — уточнимо формат, аудиторію та бюджет і підготуємо перший напрям концепції й структуру кошторису.</p>
-          <div class="contact-direct"><a href="tel:+380637211467" data-track="phone_click">+38 063 721 14 67</a><a href="#" data-config-link="telegramUrl" data-track="telegram_click" hidden>Telegram</a><a href="mailto:liqevent@gmail.com">LiQevent@gmail.com</a></div>
+          <div class="contact-direct"><a href="tel:+380637211467" data-track="phone_click" data-track-location="conferences_contact">+38 063 721 14 67</a><a href="#" data-config-link="telegramUrl" data-track="telegram_click" data-track-location="conferences_contact" hidden>Telegram</a><a href="mailto:liqevent@gmail.com" data-track="email_click" data-track-location="conferences_contact">LiQevent@gmail.com</a></div>
         </div>
         <form class="lead-form" id="lead-form" novalidate>
           <input type="hidden" name="_subject" value="Нова заявка з liqevent.com">
@@ -314,8 +314,8 @@
             <span>Деталі події можна додати зараз або обговорити пізніше.</span>
           </div>
           <label>Як до вас звертатися?<input name="client_name" type="text" autocomplete="name" placeholder="Ім'я" required></label>
-          <label>Телефон або Telegram<input name="phone_or_telegram" type="text" autocomplete="tel" inputmode="text" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="+380… / @username" required></label>
-          <label>Що плануєте?<select name="event_type" required><option value="">Оберіть формат</option><option>Корпоратив</option><option>Тімбілдинг</option><option selected>Конференція</option><option>Community event</option><option>Інший формат</option></select></label>
+          <label>Телефон, Telegram або email<input name="phone_or_telegram" type="text" autocomplete="off" inputmode="text" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="+380… / @username / name@company.ua" required></label>
+          <label>Що плануєте?<select name="event_type" required><option value="">Оберіть формат</option><option>Корпоратив</option><option>Тімбілдинг</option><option selected>Конференція</option><option>Корпоративні подарунки</option><option>Community event</option><option>Інший формат</option></select></label>
           <details class="form-optional">
             <summary><span>Додати деталі події</span><small>необов’язково</small></summary>
             <div class="form-optional-fields">
@@ -342,12 +342,12 @@
 
   <footer class="footer section-dark">
     <div class="container footer-top"><img src="../assets/img/logo-200.webp" srcset="../assets/img/logo-80.webp 80w, ../assets/img/logo-160.webp 160w, ../assets/img/logo-200.webp 200w" sizes="(max-width: 720px) 76px, 100px" width="100" height="100" loading="lazy" decoding="async" alt="LIQ EVENT" /><div><span>Івент-агенція повного циклу</span><strong>liqevent.com</strong></div><div class="footer-links"><a href="../#services">Послуги</a><a href="#cases">Кейси</a><a href="../#team">Команда</a><a href="#contact">Контакти</a></div></div>
-    <div class="container footer-bottom"><span>© 2026 LIQ EVENT</span><span>Kyiv · Ukraine</span><a href="mailto:liqevent@gmail.com">LiQevent@gmail.com</a></div>
+    <div class="container footer-bottom"><span>© 2026 LIQ EVENT</span><span>Kyiv · Ukraine</span><a href="mailto:liqevent@gmail.com" data-track="email_click" data-track-location="conferences_footer">LiQevent@gmail.com</a></div>
   </footer>
   <div class="mobile-menu" aria-hidden="true"><a href="#formats">Формати</a><a href="#scope">Що входить</a><a href="#cases">Кейси</a><a href="#team">Команда</a><a href="#pricing">Вартість</a><a href="#faq">FAQ</a><a href="#lead-form" data-track="lead_cta_click" data-track-location="conferences_mobile_menu">Обговорити конференцію ↗</a></div>
-  <nav class="quick-actions" aria-label="Швидкі контакти"><a href="tel:+380637211467" data-track="phone_click"><span aria-hidden="true">☎</span><span>Подзвонити</span></a><a href="#" data-config-link="telegramUrl" data-track="telegram_click" hidden><span aria-hidden="true">➤</span><span>Telegram</span></a><a class="quick-primary" href="#lead-form" data-track="lead_cta_click" data-track-location="conferences_mobile_sticky"><span aria-hidden="true">✦</span><span>Заявка</span></a></nav>
+  <nav class="quick-actions" aria-label="Швидкі контакти"><a href="tel:+380637211467" data-track="phone_click" data-track-location="conferences_mobile_sticky"><span aria-hidden="true">☎</span><span>Подзвонити</span></a><a href="#" data-config-link="telegramUrl" data-track="telegram_click" data-track-location="conferences_mobile_sticky" hidden><span aria-hidden="true">➤</span><span>Telegram</span></a><a class="quick-primary" href="#lead-form" data-track="lead_cta_click" data-track-location="conferences_mobile_sticky"><span aria-hidden="true">✦</span><span>Заявка</span></a></nav>
   <script src="../config.js?v=20261124tg" defer></script>
-  <script src="../script.js?v=20261112a1" defer></script>
+  <script src="../script.js?v=20261124form1" defer></script>
   <dialog id="conference-proof-dialog" aria-label="Збільшене фото події">
     <button class="proof-dialog-close" type="button" aria-label="Закрити збільшене фото">Закрити <span aria-hidden="true">×</span></button>
     <figure><img alt="" decoding="async" /><figcaption></figcaption></figure>

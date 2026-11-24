@@ -135,3 +135,51 @@ test('rate limiting blocks before Turnstile and delivery', async () => {
   assert.equal((await response.json()).code, 'rate_limited');
   assert.equal(outboundCalls, 0);
 });
+
+test('gifts are valid for the website; a missing or unknown event type is not', () => {
+  const payload = { ...validPayload, eventType: 'Корпоративні подарунки' };
+  assert.equal(validateLead(payload).lead.eventType, 'Корпоративні подарунки');
+  assert.equal(validateLead({ ...payload, eventType: '' }).code, 'invalid_event_type');
+  assert.equal(validateLead({ ...payload, eventType: 'UNKNOWN' }).code, 'invalid_event_type');
+  assert.equal(validateLead({ ...payload, phone: '', email: 'owner@invalid' }).code, 'invalid_email');
+});
+
+for (const channel of ['telegram', 'formspree']) {
+  for (const [contact, value] of [
+    ['phone', '+380000000000'],
+    ['telegram', '@fixture_user'],
+    ['email', 'test@example.invalid']
+  ]) {
+    test(`protected gifts delivery via ${channel} keeps the ${contact} value`, async () => {
+      const eventType = 'Корпоративні подарунки';
+      const payload = { ...validPayload, phone: '', telegram: '', email: '', [contact]: value, eventType };
+      const calls = [];
+      const response = await handleRequest(requestFor(payload), makeEnv(), {
+        fetchImpl: async (url, options) => {
+          if (String(url).includes('/siteverify')) return turnstileOk();
+          if (String(url).includes('api.telegram.org')) {
+            calls.push('telegram');
+            const { text } = JSON.parse(options.body);
+            assert.ok(text.includes(eventType));
+            assert.ok(text.includes(value));
+            return new Response(JSON.stringify({ ok: channel === 'telegram' }), { status: channel === 'telegram' ? 200 : 502 });
+          }
+          if (String(url).includes('formspree.io')) {
+            calls.push('formspree');
+            const body = JSON.parse(options.body);
+            assert.equal(body.eventType, eventType);
+            assert.equal(body[contact], value);
+            assert.equal(Object.hasOwn(body, 'turnstileToken'), false);
+            return new Response('{"ok":true}', { status: 200 });
+          }
+          throw new Error('Unexpected offline test request');
+        },
+        uuid: () => 'offline-gifts-id',
+        log: () => {}
+      });
+      assert.equal(response.status, 200);
+      assert.deepEqual(await response.json(), { ok: true, channel });
+      assert.deepEqual(calls, channel === 'telegram' ? ['telegram'] : ['telegram', 'formspree']);
+    });
+  }
+}

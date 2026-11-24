@@ -83,12 +83,28 @@
   });
 
   const leadForm = document.querySelector('#lead-form');
+  const eventFormat = leadForm?.querySelector('select[name="event_type"]');
+  const landingFormat = Array.from(eventFormat?.options || []).find((option) => option.defaultSelected)?.value || '';
+  // A browser-restored choice and a visitor's later selection take precedence.
+  let formatChosenManually = Boolean(eventFormat?.value && eventFormat.value !== landingFormat);
+  eventFormat?.addEventListener('change', (event) => {
+    if (event.isTrusted) formatChosenManually = true;
+  });
+  const applyCtaFormat = (link) => {
+    if (!eventFormat || formatChosenManually) return;
+    const value = link?.dataset.eventFormat || landingFormat;
+    if (value && Array.from(eventFormat.options || []).some((option) => option.value === value && !option.disabled)) {
+      // Assign the native select value silently. Do not dispatch input/change or focus it.
+      eventFormat.value = value;
+    }
+  };
   // Use one deterministic landing position for every application CTA. Long native
   // smooth anchor jumps can stop early in mobile Safari; never focus an input here.
   if (leadForm) {
     const showLeadForm = (event) => {
       if (event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
+      applyCtaFormat(event.currentTarget);
       closeMenu();
       if (window.location.hash !== '#lead-form') {
         window.history.pushState(window.history.state, '', '#lead-form');
@@ -319,6 +335,7 @@
   }
 
   leadForm?.addEventListener('input', (event) => {
+    if (event.isTrusted === false) return;
     if (!formStarted) {
       formStarted = true;
       trackFormEvent('form_start');
@@ -367,6 +384,7 @@
       const deliveryChannel = result?.channel === 'formspree' ? 'formspree' : 'telegram';
 
       leadForm.reset();
+      formatChosenManually = false;
       resetTurnstile();
       leadForm.querySelectorAll('[aria-invalid]').forEach((field) => field.removeAttribute('aria-invalid'));
       leadForm.classList.add('is-sent');
