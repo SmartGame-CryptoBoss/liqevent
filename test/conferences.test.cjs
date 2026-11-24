@@ -49,7 +49,9 @@ test('the existing form contract is reused, with only Conference preselected', (
   const normalize = html => html.replace(/\sselected(?=[\s>])/g, '').replace(/>\s+</g, '><').replace(/\s+/g, ' ').trim();
   assert.equal(normalize(form(page)), normalize(form(home)));
   assert.match(form(page), /<option selected>Конференція<\/option>/);
-  assert.match(page, /src="\.\.\/config\.js\?v=20260814a"/);
+  const configVersion = home.match(/src="config\.js\?v=([^"]+)"/)?.[1];
+  assert.ok(configVersion, 'home uses a versioned config');
+  assert.ok(page.includes(`src="../config.js?v=${configVersion}"`), 'conference uses the same config version');
 });
 
 test('GTM, GA4 and Meta installations are identical to the current homepage', () => {
