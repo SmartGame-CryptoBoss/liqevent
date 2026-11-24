@@ -1,0 +1,49 @@
+/* Seasonal conversion package: scoped additions, no form/hero/global resets. */
+.service-card-corporate{min-width:0}
+.service-corporate-actions{display:flex;align-items:flex-start;flex-direction:column;gap:14px;margin-top:24px;min-width:0;width:100%}
+.service-corporate-actions a{display:block;width:100%;max-width:100%;font-size:16px;line-height:1.5;white-space:normal;overflow-wrap:break-word}
+.seasonal-offer{padding:36px 0 64px;background:#111214;color:#f5f2ef}
+.seasonal-offer-inner{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:36px 56px;padding:36px;border:1px solid #ffffff24;border-top:2px solid #e955af;border-radius:22px;background:#1a1b1e}
+.seasonal-offer .seasonal-kicker{font-size:14px;line-height:1.5;letter-spacing:.09em;color:#d6c5d2;margin:0 0 18px}
+.seasonal-offer h2{font-size:clamp(28px,3vw,42px);line-height:1.13;letter-spacing:-.035em;margin:0 0 20px}
+.seasonal-offer h2 em{font-style:normal;color:#f17bbe}
+.seasonal-offer p{font-size:16px;line-height:1.65;color:#d3ccd2;margin:0 0 24px}
+.seasonal-offer ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 24px;align-content:center}
+.seasonal-offer li{padding:13px 0;border-bottom:1px solid #ffffff20;font-size:16px;line-height:1.5}
+.seasonal-offer li:last-child{grid-column:1/-1;color:#f5b7de}
+.seasonal-offer .btn{max-width:100%;white-space:normal;text-align:center}
+.landing-client-proof{padding:30px 0 64px;background:#111214;color:#f5f2ef;scroll-margin-top:110px}
+.landing-client-proof *,.landing-review-dialog *{box-sizing:border-box}
+.landing-review-inner{width:min(1240px,calc(100% - 64px));margin-inline:auto}
+.landing-review-card{display:grid;grid-template-columns:minmax(0,.76fr) minmax(0,1.4fr);grid-template-areas:"copy message" "more message";gap:28px 42px;padding:34px;border:1px solid #ffffff24;border-top:2px solid #e955af;border-radius:24px;background:#1a1b1e}
+.landing-review-copy{grid-area:copy;align-self:end;min-width:0}
+.landing-review-kicker{margin:0 0 22px;font-size:14px;font-weight:650;letter-spacing:.07em;line-height:1.6;color:#c6bdc7}
+.landing-review-copy h2{font-size:clamp(28px,2.5vw,36px);font-weight:750;line-height:1.14;letter-spacing:-.035em;margin:0 0 23px;color:#f5f2ef}
+.landing-review-copy h2 em{font-style:normal;color:#f17bbe}
+.landing-review-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;font-size:14px;line-height:1.5;color:#c6bdc7;margin:0}
+.landing-review-meta>span{color:#f5f2ef;font-weight:650}
+.landing-review-meta time{padding-left:12px;border-left:1px solid #ffffff30}
+.landing-review-message{grid-area:message;display:block;min-width:0;padding:20px;background:#fff;color:#27262a;border-radius:14px;text-decoration:none;align-self:center}
+.landing-review-message picture,.landing-review-message img{display:block;width:100%;height:auto;max-width:100%}
+.landing-review-zoom{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid #f0edf0;padding-top:12px;margin-top:15px;font-size:14px;line-height:1.5;color:#615b63}
+.landing-review-zoom>span{font-size:19px;color:#a83d7b}
+.landing-review-more{grid-area:more;align-self:start;justify-self:start;display:inline-flex;align-items:center;gap:13px;max-width:100%;padding:7px 0 10px;border-bottom:1px solid #ffffff45;text-decoration:none;font-size:14px;font-weight:600;line-height:1.5;color:#ece5eb}
+.landing-review-more>span{font-size:18px;line-height:1;color:#ef7abd}
+.landing-client-proof a:focus-visible,.landing-review-dialog button:focus-visible,.case-lead-link:focus-visible{outline:3px solid #f17bbe;outline-offset:5px}
+.landing-review-dialog{max-width:min(1100px,calc(100vw - 40px));width:1100px;max-height:calc(100dvh - 40px);padding:0;border:0;border-radius:22px;background:#fff;color:#222;font:inherit;overflow:auto;overscroll-behavior:contain}
+.landing-review-dialog::backdrop{background:#111214cf;backdrop-filter:blur(5px)}
+.landing-review-dialog-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 26px;background:#fff;border-bottom:1px solid #ebe7eb}
+.landing-review-dialog-head p{margin:0 0 5px;color:#615b63;font-size:12px;letter-spacing:.05em;line-height:1.5}
+.landing-review-dialog-head h2{font-size:20px;line-height:1.25;letter-spacing:-.025em;margin:0;color:#222;font-weight:750}
+.landing-review-dialog button{font:inherit;cursor:pointer;touch-action:manipulation}
+.landing-review-close{display:inline-flex;align-items:center;gap:12px;flex-shrink:0;min-width:44px;min-height:44px;padding:10px 16px;border:0;border-radius:30px;background:#171719;color:#fff;font-size:14px!important}
+.landing-review-dialog-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 26px;font-size:14px;color:#615b63;line-height:1.6}
+.landing-review-toggle{border:1px solid #d7d2d7;border-radius:9px;background:#f5f2ef;color:#29242a;min-height:44px;white-space:nowrap;padding:10px 14px;font-size:14px!important}
+.landing-review-dialog-image{margin:0;padding:10px 26px 25px;overflow:auto;overscroll-behavior:contain}
+.landing-review-dialog-image picture,.landing-review-dialog-image img{display:block;width:100%;height:auto;max-width:100%}
+.landing-review-dialog-image.is-original img{width:auto;max-width:none}
+.case-lead-section{margin:28px 0 40px;padding:30px 0;border-bottom:1px solid #ffffff24}
+.case-lead-link{display:inline-flex;align-items:center;justify-content:center;min-height:48px;max-width:100%;padding:14px 24px;border-radius:999px;background:#ef70bd;color:#111214;font:inherit;font-size:16px;font-weight:600;line-height:1.5;text-decoration:none;white-space:normal;text-align:center}
+@media(max-width:850px){.seasonal-offer-inner{gap:28px;padding:28px}.landing-review-card{gap:24px;padding:26px}.landing-review-message{padding:14px}}
+@media(max-width:720px){.seasonal-offer{padding:24px 0 40px}.seasonal-offer-inner{grid-template-columns:minmax(0,1fr);gap:24px;padding:24px 20px}.seasonal-offer h2{font-size:30px}.seasonal-offer .btn{width:100%}.seasonal-offer ul{gap:0 16px}.landing-client-proof{padding:24px 0 48px;scroll-margin-top:88px}.landing-review-inner{width:calc(100% - 36px)}.landing-review-card{grid-template-columns:minmax(0,1fr);grid-template-areas:"copy" "message" "more";gap:24px;padding:22px 18px;border-radius:20px}.landing-review-copy{align-self:auto}.landing-review-copy h2{font-size:30px;max-width:18ch;margin-bottom:18px}.landing-review-message{padding:12px;border-radius:12px}.landing-review-dialog{max-width:calc(100vw - 20px);max-height:calc(100dvh - 20px);border-radius:16px}.landing-review-dialog-head{padding:16px;gap:12px}.landing-review-dialog-head h2{font-size:18px}.landing-review-close{padding:10px 13px}.landing-review-dialog-toolbar{padding:12px 16px;align-items:flex-start;gap:13px}.landing-review-dialog-image{padding:8px 16px 20px}.case-lead-link{width:100%;padding:14px 18px}}
+@media(max-width:350px){.seasonal-offer-inner{padding:22px 16px}.seasonal-offer h2{font-size:27px}.seasonal-offer li{font-size:14px}.landing-review-card{padding:21px 14px}.landing-review-copy h2{font-size:27px}.landing-review-message{padding:9px}.landing-review-dialog-head h2{font-size:16px}.landing-review-close{padding:10px}.landing-review-dialog-toolbar{flex-wrap:wrap}}
