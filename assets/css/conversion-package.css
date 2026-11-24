@@ -42,6 +42,13 @@
 .landing-review-dialog-image{margin:0;padding:10px 26px 25px;overflow:auto;overscroll-behavior:contain}
 .landing-review-dialog-image picture,.landing-review-dialog-image img{display:block;width:100%;height:auto;max-width:100%}
 .landing-review-dialog-image.is-original img{width:auto;max-width:none}
+.pricing-example{margin:0 0 22px;padding:16px;border:1px solid #ffffff30;border-radius:14px;background:#ffffff06}
+.pricing-example h3{margin:0 0 12px;color:#f5f2ef;font-size:17px;line-height:1.35;letter-spacing:normal}
+.pricing-example dl{margin:0}
+.pricing-example dl>div{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:10px;padding:5px 0;color:#f5f2ef;font-size:15px;line-height:1.45}
+.pricing-example dd{margin:0;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pricing-example .pricing-example-total{margin-top:6px;padding-top:11px;border-top:1px solid #ffffff30;color:#ff9bd3;font-weight:750}
+.pricing-example p{margin:10px 0 0;color:#c6bdc7;font-size:14px;line-height:1.5}
 .case-lead-section{margin:28px 0 40px;padding:30px 0;border-bottom:1px solid #ffffff24}
 .case-lead-link{display:inline-flex;align-items:center;justify-content:center;min-height:48px;max-width:100%;padding:14px 24px;border-radius:999px;background:#ef70bd;color:#111214;font:inherit;font-size:16px;font-weight:600;line-height:1.5;text-decoration:none;white-space:normal;text-align:center}
 @media(max-width:850px){.seasonal-offer-inner{gap:28px;padding:28px}.landing-review-card{gap:24px;padding:26px}.landing-review-message{padding:14px}}
