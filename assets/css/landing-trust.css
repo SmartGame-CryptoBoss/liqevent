@@ -1,0 +1,80 @@
+/* Homepage team and commission styling, scoped to the two service landings. */
+.landing-founders,
+.landing-pricing {
+  padding: clamp(78px, 9vw, 130px) 0;
+}
+
+.landing-founders .team-intro,
+.landing-pricing .pricing-grid {
+  display: grid;
+  gap: clamp(32px, 5.6vw, 80px);
+}
+
+.landing-founders .team-intro {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  align-items: end;
+}
+
+.landing-founders h2,
+.landing-pricing h2 {
+  margin-bottom: 0;
+  font-size: clamp(44px, 5.7vw, 84px);
+  line-height: .94;
+}
+
+.landing-founders h2 em { color: #e74aa5; }
+.landing-founders .team-intro > p { color: #65656a; font-size: 17px; line-height: 1.6; }
+
+.landing-founders .team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  max-width: 920px;
+  margin: clamp(28px, 5vw, 70px) auto 0;
+}
+
+.landing-founders .team-card { background: #fff; border-radius: 26px; overflow: hidden; }
+.landing-founders .portrait { aspect-ratio: 4 / 4.8; overflow: hidden; }
+.landing-founders .portrait img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+.landing-founders .portrait .vasyl-photo { object-position: 50% 55%; }
+.landing-founders .team-card:hover img { transform: scale(1.025); }
+.landing-founders .team-card-copy { padding: 22px 24px 28px; }
+.landing-founders .team-card-copy span { color: #66666a; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.landing-founders .team-card-copy h3 { font-size: 31px; margin: 7px 0 10px; letter-spacing: -.03em; }
+.landing-founders .team-card-copy p { color: #666; font-size: 16px; line-height: 1.55; margin: 0; }
+
+.landing-pricing .pricing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+.landing-pricing .price-card { background: #1a1b1f; border: 1px solid var(--line); padding: clamp(22px, 3vw, 36px); border-radius: 30px; }
+.landing-pricing .price-card > span { font-size: 11px; letter-spacing: .14em; color: #aaa; }
+.landing-pricing .price { margin-top: 26px; }
+.landing-pricing .price strong { display: inline-block; font-size: clamp(76px, 12vw, 112px); color: var(--pink); letter-spacing: -.08em; line-height: 1; }
+.landing-pricing .price-card > p:not(.price-note) { color: #aaa; font-size: 17px; margin: 4px 0 0; }
+.landing-pricing .price-card hr { border: 0; border-top: 1px solid var(--line); margin: 28px 0; }
+.landing-pricing .price-note { color: #aaa; font-size: 16px; line-height: 1.6; margin: 0 0 22px; }
+.landing-pricing .price-includes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; padding: 0; margin: 0 0 28px; list-style: none; }
+.landing-pricing .price-includes li { position: relative; padding-left: 20px; color: #d1ced0; font-size: 16px; line-height: 1.45; }
+.landing-pricing .price-includes li::before { content: '✦'; position: absolute; top: 3px; left: 0; color: var(--pink); font-size: 10px; }
+.landing-pricing .price-card .btn { max-width: 100%; white-space: normal; text-align: center; }
+
+@media (max-width: 1050px) {
+  .landing-founders .team-intro,
+  .landing-pricing .pricing-grid { grid-template-columns: minmax(0, 1fr); gap: 30px; }
+}
+
+@media (max-width: 720px) {
+  /* Land directly on the new sections when the mobile menu closes. */
+  html:has(.landing-founders:target, .landing-pricing:target) { scroll-behavior: auto; }
+  .landing-founders,
+  .landing-pricing { padding-block: 62px 78px; }
+  .landing-founders .team-grid,
+  .landing-pricing .price-includes { grid-template-columns: minmax(0, 1fr); }
+  .landing-founders .portrait { aspect-ratio: 4 / 4.3; }
+  .landing-founders h2,
+  .landing-pricing h2 { font-size: clamp(36px, 11vw, 50px); }
+  .landing-pricing .price { margin-top: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-founders .portrait img { transition: none; }
+  .landing-founders .team-card:hover img { transform: none; }
+}
