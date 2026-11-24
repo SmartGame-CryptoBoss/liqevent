@@ -10,5 +10,8 @@ window.LIQEVENT_CONFIG = Object.freeze({
   turnstileSiteKey: '0x4AAAAAAEQLf1BdOtiRJxRH',
 
   // Public link only, for example https://t.me/your_public_username
-  telegramUrl: ''
+  // Restore the public business contact only on the three approved pages.
+  telegramUrl: /^\/(?:index\.html|(?:corporate-events|conferences)(?:\/index\.html|\/)?)?$/.test(window.location.pathname)
+    ? 'https://t.me/Mariia_Liqevent'
+    : ''
 });
