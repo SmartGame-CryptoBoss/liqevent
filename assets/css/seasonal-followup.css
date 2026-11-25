@@ -1,0 +1,35 @@
+/* Scope: Corporate seasonal discovery and Corporate Partnership calendar. */
+.corporate-header .seasonal-nav-link,.mobile-menu .seasonal-nav-link{color:#f5a5d0;opacity:1}
+.corporate-header .desktop-nav{gap:clamp(12px,1.8vw,27px);align-items:center}
+.corporate-header .desktop-nav a{white-space:nowrap}
+@media(min-width:1051px) and (max-width:1260px){.corporate-header .desktop-nav{gap:12px}.corporate-header .desktop-nav a{font-size:11px;letter-spacing:.045em}}
+.seasonal-followup,.seasonal-timeline{scroll-margin-top:8px}
+.seasonal-followup .seasonal-format{display:flex;flex-direction:column;min-width:0}
+.seasonal-followup .seasonal-format-copy{display:flex;flex-direction:column;align-items:flex-start;flex:1;min-width:0}
+.seasonal-followup .seasonal-format-copy h4{margin-bottom:.4em}
+.seasonal-followup .seasonal-format-copy p{line-height:1.52;font-size:.93rem}
+.seasonal-followup .seasonal-format-proof{display:block;margin:0 0 12px;text-decoration:underline;text-underline-offset:3px;font-size:.82rem;line-height:1.44}
+.seasonal-followup .seasonal-format-cta{display:flex;align-items:center;min-height:44px;width:100%;box-sizing:border-box;margin-top:auto;padding:8px 10px;border:1px solid #ec83bc66;border-radius:9px;color:#ffe7f4;background:#ec83bc0d;text-decoration:none;font-weight:750;font-size:.83rem;line-height:1.35;overflow-wrap:anywhere}
+.seasonal-followup .seasonal-format-cta:hover,.seasonal-followup .seasonal-format-cta:focus-visible{background:#ec83bc26;color:#fff}
+.seasonal-followup .seasonal-format-online{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center}
+.seasonal-format-online span{font-size:.72rem;line-height:1.2}
+.seasonal-timeline{margin-top:26px;padding:clamp(16px,3vw,30px);border:1px solid #e9a3c547;border-radius:18px;background:#19171c}
+.seasonal-timeline-list{list-style:none;margin:18px 0 14px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.seasonal-timeline-list li{padding:12px 14px;border-left:2px solid #ee89c2;background:#ffffff09;border-radius:0 8px 8px 0}
+.seasonal-timeline-list li span{display:block;color:#f1a9ce;font-size:.85rem;font-weight:800;font-variant-numeric:tabular-nums;margin-bottom:5px}
+.seasonal-timeline-list h4{margin:0;font-size:1rem;color:#fff}
+.seasonal-timeline-list p{margin:4px 0 0;font-size:.9rem;line-height:1.42;color:#dfd4db}
+.seasonal-timeline .seasonal-formats-note a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:700px){.seasonal-timeline-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:530px){.seasonal-followup .seasonal-format-media{min-height:0;aspect-ratio:2.35/1}.seasonal-followup .seasonal-format-copy{padding:11px 13px 13px}.seasonal-followup .seasonal-format-online svg{width:45px;height:auto}.seasonal-timeline-list{grid-template-columns:1fr}.seasonal-timeline-list li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:3px 8px}.seasonal-timeline-list p{grid-column:2;margin:0}.seasonal-timeline-list li span{margin:2px 0 0}}
+.partnership-calendar-heading{display:grid;grid-template-columns:1.2fr 1fr;align-items:end;gap:14px 28px}
+.partnership-calendar-heading h2{margin-bottom:0}
+.partnership-calendar-heading>p{margin:0;max-width:43ch}
+.partnership-calendar-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;list-style:none;padding:0;margin:24px 0 16px}
+.partnership-calendar-grid li{min-width:0;padding:16px;border:1px solid #86818d5c;border-top:3px solid #ed80bd;border-radius:12px;background:#ffffff06}
+.partnership-calendar-grid h3{margin:.15em 0 .5em;font-size:1.17rem;line-height:1.25}
+.partnership-calendar-grid p{line-height:1.45;margin:.6em 0 0}
+.partnership-calendar-grid .eyebrow{margin-top:0}
+.partnership-calendar-note{margin-bottom:18px}
+@media(max-width:820px){.partnership-calendar-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:510px){.partnership-calendar-heading,.partnership-calendar-grid{grid-template-columns:1fr}.partnership-calendar-grid{margin-top:18px}}
