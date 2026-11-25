@@ -1,0 +1,18 @@
+.seasonal-offer .seasonal-formats{margin-top:26px;padding:26px;border:1px solid #ffffff24;border-radius:20px;background:#17181b}
+.seasonal-formats-heading{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:end;gap:10px 30px;margin-bottom:18px}
+.seasonal-formats h3{margin:0;font-size:clamp(25px,3.2vw,37px);line-height:1.13;letter-spacing:-.04em;color:#f7f2f5}
+.seasonal-offer .seasonal-formats-heading p{margin:0;color:#d3ccd2}
+.seasonal-formats-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.seasonal-format{display:flex;min-width:0;flex-direction:column;overflow:hidden;border:1px solid #ffffff24;border-radius:12px;background:#202125}
+.seasonal-format-media{display:grid;place-items:center;aspect-ratio:4/3;overflow:hidden;color:#f598cd;background:#2f2430}
+.seasonal-format-media img{width:100%;height:100%;object-fit:cover;display:block}
+.seasonal-format-online svg{width:min(46%,72px);height:auto}
+.seasonal-format-copy{padding:11px 11px 13px}
+.seasonal-format h4{margin:0 0 6px;font-size:16px;line-height:1.23;overflow-wrap:anywhere;color:#fff1f9}
+.seasonal-offer .seasonal-format p{margin:0;font-size:16px;line-height:1.45;color:#d3ccd2}
+.seasonal-format a{display:inline-block;margin-top:10px;color:#f6b8db;font-size:14px;line-height:1.32;text-underline-offset:3px;overflow-wrap:anywhere}
+.seasonal-format a:focus-visible{outline:2px solid #f6b8db;outline-offset:3px}
+.seasonal-offer .seasonal-formats-note{margin:13px 0 0;font-size:14px;line-height:1.4;color:#c8b9c4}
+@media(max-width:1050px){.seasonal-formats-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:720px){.seasonal-offer .seasonal-formats{margin-top:16px;padding:16px}.seasonal-formats-heading{grid-template-columns:minmax(0,1fr);margin-bottom:13px}.seasonal-formats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}}
+@media(max-width:530px){.seasonal-formats-grid{grid-template-columns:minmax(0,1fr)}.seasonal-format{display:grid;grid-template-columns:minmax(65px,29%) minmax(0,1fr)}.seasonal-format-media{position:relative;min-height:90px;aspect-ratio:auto}.seasonal-format-media img{position:absolute;inset:0}.seasonal-format-copy{padding:10px}.seasonal-formats-heading h3{font-size:24px}}
