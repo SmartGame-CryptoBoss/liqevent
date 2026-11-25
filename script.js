@@ -98,6 +98,17 @@
       eventFormat.value = value;
     }
   };
+  // Static cross-page form entry. Only this exact fragment suggests a format.
+  // It is a UI hint, not an acquisition source, and does not fire a CTA event.
+  if (leadForm?.querySelector('#lead-form-gifts')) {
+    const applyEntryFormat = () => {
+      if (window.location.hash === '#lead-form-gifts') {
+        applyCtaFormat({ dataset: { eventFormat: 'Корпоративні подарунки' } });
+      }
+    };
+    applyEntryFormat();
+    window.addEventListener('hashchange', applyEntryFormat);
+  }
   // Use one deterministic landing position for every application CTA. Long native
   // smooth anchor jumps can stop early in mobile Safari; never focus an input here.
   if (leadForm) {

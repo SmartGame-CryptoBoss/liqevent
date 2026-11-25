@@ -19,7 +19,7 @@ test('three primary forms share one contact field and expose the gift format', (
     const select = html.match(/<select name="event_type"[^>]*>(.*?)<\/select>/)?.[1];
     assert.ok(select?.includes('<option>Корпоративні подарунки</option>'), file);
     assert.equal(select.match(/<option selected>([^<]+)<\/option>/)?.[1] || null, landingFormat, file);
-    assert.match(html, /script\.js\?v=20261124form1/, file);
+    assert.match(html, file === 'index.html' ? /script\.js\?v=20261125entry1/ : /script\.js\?v=20261124form1/, file);
     for (const link of html.match(/<a [^>]*(?:href="(?:tel:|mailto:)|data-config-link="telegramUrl")[^>]*>/g) || []) {
       const name = link.includes('tel:') ? 'phone_click' : link.includes('mailto:') ? 'email_click' : 'telegram_click';
       assert.ok(link.includes(`data-track="${name}"`), `${file}: ${link}`);
