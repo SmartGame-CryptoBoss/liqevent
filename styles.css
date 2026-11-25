@@ -165,6 +165,8 @@
 /* P1: immediately available hero/form and readable mobile controls. */
 .hero-copy,.hero-visual,.lead-form{opacity:1;transform:none}
 #lead-form{scroll-margin-top:92px;scroll-margin-bottom:100px}
+.lead-form-route-anchor{display:block;height:0;scroll-margin-top:110px}
+html:has(.lead-form-route-anchor:target){scroll-behavior:auto}
 .lead-form input:not([type="checkbox"]):not([type="hidden"]),
 .lead-form select,.lead-form textarea{font-size:16px;line-height:1.4;min-height:48px;scroll-margin-top:100px;scroll-margin-bottom:100px}
 @media(max-width:720px){

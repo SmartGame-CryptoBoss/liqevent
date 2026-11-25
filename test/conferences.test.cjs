@@ -46,7 +46,9 @@ test('application CTAs use only the existing handler and same-page form', () => 
 
 test('the existing form contract is reused, with only Conference preselected', () => {
   const form = html => html.match(/<form\b[^>]*id="lead-form"[\s\S]*?<\/form>/)[0];
-  const normalize = html => html.replace(/\sselected(?=[\s>])/g, '').replace(/>\s+</g, '><').replace(/\s+/g, ' ').trim();
+  const normalize = html => html
+    .replace(/<span id="lead-form-(?:gifts|partnership)" class="lead-form-route-anchor" aria-hidden="true"><\/span>/g, '')
+    .replace(/\sselected(?=[\s>])/g, '').replace(/>\s+</g, '><').replace(/\s+/g, ' ').trim();
   assert.equal(normalize(form(page)), normalize(form(home)));
   assert.match(form(page), /<option selected>Конференція<\/option>/);
   const configVersion = home.match(/src="config\.js\?v=([^"]+)"/)?.[1];

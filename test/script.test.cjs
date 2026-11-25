@@ -5,8 +5,8 @@ const vm = require('node:vm');
 const path = require('node:path');
 
 function fixture(fetchImpl = async () => ({ ok: true, status: 200, json: async () => ({ ok: true, channel: 'telegram' }) }),
-  { landingFormat = 'Інший формат', initialFormat = landingFormat } = {}) {
-  const events = [], pixels = [], observers = [], scripts = [], posts = [];
+  { landingFormat = 'Інший формат', initialFormat = landingFormat, entryAnchor = false, hash = '' } = {}) {
+  const events = [], pixels = [], observers = [], scripts = [], posts = [], windowHandlers = {};
   const element = (extra = {}) => {
     const attributes = {}, handlers = {}, listeners = {}, classes = new Set();
     return {
@@ -43,7 +43,8 @@ function fixture(fetchImpl = async () => ({ ok: true, status: 200, json: async (
   const form = element({
     values,
     querySelectorAll: s => s === '[required]' ? fields : [],
-    querySelector: s => s === '[name="phone_or_telegram"]' ? fields[1] : s === 'select[name="event_type"]' ? format : button,
+    querySelector: s => s === '#lead-form-gifts' ? (entryAnchor ? element() : null)
+      : s === '[name="phone_or_telegram"]' ? fields[1] : s === 'select[name="event_type"]' ? format : button,
     reset: () => { Object.keys(values).forEach(k => { values[k] = k === 'event_type' ? landingFormat : ''; }); }
   });
   const status = element(), intro = element(), contact = element(), widget = element();
@@ -63,8 +64,8 @@ function fixture(fetchImpl = async () => ({ ok: true, status: 200, json: async (
   ].map(([track, href]) => element({ href, textContent: track, dataset: { track, trackLocation: 'test_contact' } }));
   const window = { LIQEVENT_CONFIG: { leadEndpoint: 'https://example.test/leads', turnstileSiteKey: 'test-key' },
     gtag: (...args) => events.push(args), fbq: (...args) => pixels.push(args), dataLayer: [],
-    addEventListener() {}, setTimeout() {}, requestAnimationFrame() {}, scrollY: 0,
-    location: { hash: '' }, history: { state: null, pushState() {} }
+    addEventListener(name, fn) { windowHandlers[name] = fn; }, setTimeout() {}, requestAnimationFrame() {}, scrollY: 0,
+    location: { hash }, history: { state: null, pushState() {} }
   };
   class Observer {
     constructor(callback, options) { this.callback = callback; this.options = options; this.connected = true; observers.push(this); }
@@ -91,9 +92,29 @@ function fixture(fetchImpl = async () => ({ ok: true, status: 200, json: async (
   const submit = () => form.handlers.submit({ preventDefault() {} });
   const count = name => events.filter(e => e[0] === 'event' && e[1] === name).length;
   const leadCount = () => pixels.filter(e => e[0] === 'track' && e[1] === 'Lead').length;
-  return { events, pixels, observers, scripts, posts, form, status, hero, pricing, ctas, channelLinks, values, fields, format, verify, submit, count, leadCount, window };
+  return { events, pixels, observers, scripts, posts, form, status, hero, pricing, ctas, channelLinks, values, fields, format, verify, submit, count, leadCount, window, windowHandlers };
 }
 
+test('trusted static Gifts alias silently selects a format, not attribution or a conversion', () => {
+  const f = fixture(undefined, {landingFormat: '', entryAnchor: true, hash: '#lead-form-gifts'});
+  assert.equal(f.format.value, 'Корпоративні подарунки');
+  assert.equal(f.events.length, 0);
+  assert.equal(f.pixels.length, 0);
+  assert.equal(f.posts.length, 0);
+  f.format.value = 'Конференція';
+  f.format.handlers.change({ isTrusted: true });
+  f.windowHandlers.hashchange();
+  assert.equal(f.format.value, 'Конференція');
+});
+
+test('Partnership, unknown and non-home entry do not preselect Gifts', () => {
+  for (const [hash, entryAnchor] of [['#lead-form-partnership', true],
+    ['#lead-form-gifts&format=example', true], ['#lead-form-gifts', false]]) {
+    const f = fixture(undefined, {landingFormat: '', entryAnchor, hash});
+    assert.equal(f.format.value, '');
+    assert.equal(f.count('form_start'), 0);
+  }
+});
 test('form view is once per page, first input is once, and verification waits for form intent', () => {
   const f = fixture();
   assert.equal(f.scripts.length, 0);
